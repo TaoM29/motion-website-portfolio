@@ -2,7 +2,7 @@
 
 import { motion, MotionConfig, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Mail, Plus } from 'lucide-react';
-import { type PointerEvent, type ReactNode, useState } from 'react';
+import { type CSSProperties, type PointerEvent, type ReactNode, useState } from 'react';
 import { portfolio, type Project } from './portfolio';
 
 function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -42,16 +42,35 @@ function Portrait() {
   </div>;
 }
 
+function TypedLine({ text, delay, pace, className = '' }: { text: string; delay: number; pace: number; className?: string }) {
+  return <span className={`typed-line ${className}`} aria-hidden="true" style={{ '--typing-pace': `${pace}s` } as CSSProperties}>
+    {Array.from(text).map((character, index) => <span className="typed-character" key={index} style={{ '--character-delay': `${delay + index * pace}s` } as CSSProperties}>{character}</span>)}
+  </span>;
+}
+
+function IntroductionTitle() {
+  const greeting = portfolio.name ? 'HI, I’M' : 'A LITTLE';
+  const name = portfolio.name ? `${portfolio.name.split(' ')[0].toUpperCase()}.` : 'ABOUT ME.';
+  return <div className="hero-title">
+    <p className="eyebrow"><span className="sr-only">Data science, AI, Software</span><TypedLine text="Data science · AI · Software" delay={0.2} pace={0.028} /></p>
+    <h1 aria-label={`${greeting} ${name}`}>
+      <TypedLine text={greeting} delay={1.1} pace={0.085} className="typed-greeting" />
+      <br />
+      <TypedLine text={name} delay={1.95} pace={0.115} className="typed-name" />
+    </h1>
+  </div>;
+}
+
 function Hero() {
   return <section className="hero" id="top">
     <nav className="navigation" aria-label="Main navigation">
       <a className="wordmark" href="#top" aria-label="Back to home">{portfolio.name || 'PERSONAL'}<span> / PORTFOLIO</span><i aria-hidden="true" /></a>
       <div className="nav-links"><a href="#about">About</a><a href="#projects">Work</a><a href="#interests">Interests</a><a href="#contact">Contact <ArrowUpRight size={15} aria-hidden="true" /></a></div>
     </nav>
-    <div className="hero-title"><Reveal><p className="eyebrow">Data science · AI · Software</p><h1 className="metallic">{portfolio.name ? <>HI, I’M<br /><span>{portfolio.name.split(' ')[0]}.</span></> : <>A LITTLE<br /><span>ABOUT ME.</span></>}</h1></Reveal></div>
+    <IntroductionTitle />
     <Portrait />
     <div className="hero-footer"><Reveal><p>{portfolio.introduction}</p></Reveal><a className="round-link" href="#projects">Explore my work <ArrowDown size={19} aria-hidden="true" /></a></div>
-    <span className="hero-coordinate" aria-hidden="true">01 — INTRODUCTION</span>
+    <span className="hero-coordinate">Introduction</span>
   </section>;
 }
 
