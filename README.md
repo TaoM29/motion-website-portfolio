@@ -24,6 +24,10 @@ Final corrective image prompt:
 
 ## Suit portrait update
 
-The current asset is `public/images/personal-avatar-suit.png`, edited with built-in imagegen. The hover movement now follows the pointer up to 72px horizontally and 56px vertically with spring easing and a gentle tilt. The stationary hover region avoids movement feedback; reduced-motion preferences disable the effect.
+The current asset is `public/images/personal-avatar-suit.png`, edited with built-in imagegen. The hover movement now follows the pointer up to 132px horizontally and 94px vertically with spring easing and a gentle tilt. The stationary hover region extends 180px around the portrait and avoids movement feedback; reduced-motion preferences disable the effect.
 
 Image edit prompt: Change only the clothing to a tailored charcoal suit jacket, crisp white collared shirt buttoned to the neck, and neatly knotted deep burgundy tie. Cover the necklace. Preserve the original face, identity, expression, hair, 3D style, proportions, rounded bust framing, 1024×1536 canvas, lighting and dark background. No text, logos, accessories or new objects.
+
+## Page motion
+
+The introduction keeps opaque text visible after its one-time typing entrance, with crimson cursors that fade after each line. Section labels use crimson text without numerical prefixes. Heading and portrait parallax, staggered skill and interest lists, section rules, project reveals, and the contact entrance follow native scrolling. Reduced-motion preferences disable typing, parallax, and pointer motion while keeping content visible.
