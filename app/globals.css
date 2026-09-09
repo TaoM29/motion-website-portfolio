@@ -247,36 +247,57 @@ h3 { font-weight: 400; }
 .stacked-visual.artwork img { object-fit: cover; }
 .project-preview figcaption { padding: 10px 14px; font-size: .8rem; color: var(--muted); }
 
-.interest-gallery { margin-top: 40px; }
+.interests-section { padding-bottom: 0; }
+.interest-gallery { position: relative; margin-top: 40px; padding-bottom: 100px; }
 .interest-objects { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 2vw, 32px); padding: 24px 14px; overflow: clip; }
 .interest-object { position: relative; min-width: 0; aspect-ratio: 1; display: grid; place-items: center; mix-blend-mode: lighten; }
 .interest-drift, .interest-tilt, .interest-object-angle { width: 100%; }
 .interest-loop { display: block; width: 100%; height: auto; user-select: none; }
-.interest-tennis .interest-object-angle { width: 83%; margin-inline: auto; }
 .interest-vinyl .interest-object-angle { overflow: clip; transform: perspective(700px) rotateX(20deg); }
-.interest-tennis .interest-loop { animation: interest-bounce 3.8s ease-in-out infinite; }
 .interest-vinyl .interest-loop { animation: interest-record 14s linear infinite; }
 .interest-strength .interest-loop { animation: interest-lift 4.6s ease-in-out infinite; }
 .interest-running .interest-loop { animation: interest-stride 2.8s cubic-bezier(.45, 0, .3, 1) infinite; }
 .interest-equalizer { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 22px; display: flex; align-items: center; gap: 4px; opacity: .75; }
 .interest-equalizer i { width: 3px; height: 100%; border-radius: 3px; background: #ef6578; transform: scaleY(.35); animation: interest-beat 1.15s ease-in-out infinite alternate; }
-.interest-gallery .interest-loop, .interest-gallery .interest-equalizer i { animation-play-state: paused; }
-.interest-gallery[data-active='true'] .interest-loop, .interest-gallery[data-active='true'] .interest-equalizer i { animation-play-state: running; }
+.interest-gallery .interest-loop, .interest-gallery .interest-equalizer i, .interest-gallery .tennis-loop { animation-play-state: paused; }
+.interest-gallery[data-active='true'] .interest-loop, .interest-gallery[data-active='true'] .interest-equalizer i, .interest-gallery[data-active='true'] .tennis-loop { animation-play-state: running; }
 .interest-motion-control { display: flex; justify-content: flex-end; margin-top: 8px; }
 .interest-motion-control button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: .875rem; cursor: pointer; }
 .interest-motion-control button:hover { color: var(--silver); border-color: var(--line); }
-@keyframes interest-bounce { 0%, 100% { transform: translateY(8px) rotate(-6deg); } 50% { transform: translateY(-15px) rotate(9deg); } }
 @keyframes interest-record { to { transform: rotate(360deg); } }
 @keyframes interest-lift { 0%, 100% { transform: translateY(10px) rotate(-5deg); } 45%, 60% { transform: translateY(-13px) rotate(5deg); } }
 @keyframes interest-stride { 0%, 100% { transform: translate(-9px, 7px) rotate(4deg); } 40% { transform: translate(12px, -17px) rotate(-10deg); } 72% { transform: translate(5px, 4px) rotate(2deg); } }
 @keyframes interest-beat { 0% { transform: scaleY(.25); } 40% { transform: scaleY(.9); } 75% { transform: scaleY(.45); } 100% { transform: scaleY(1); } }
 @media (max-width: 760px) {
- .interest-gallery { margin-top: 22px; }
+ .interest-gallery { margin-top: 22px; padding-bottom: 65px; }
  .interest-objects { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; padding: 20px 10px; }
  .interest-object { width: min(100%, 230px); justify-self: center; }
  .interest-equalizer { height: 16px; }
+ .interest-tennis-slot { order: 1; }
+ .interest-motion-control { justify-content: flex-start; }
 }
+
+.tennis-court { position: absolute; inset: 0; overflow: clip; pointer-events: none; mix-blend-mode: lighten; visibility: hidden; --tennis-cycle: 1.8s; }
+.tennis-court[data-ready='true'] { visibility: visible; }
+.tennis-racket { position: absolute; left: var(--racket-left); top: var(--racket-top); width: var(--racket-width); }
+.tennis-racket-strike { transform-origin: 86% 48.3%; animation: tennis-tap var(--tennis-cycle) ease-in-out infinite; }
+.tennis-racket img { display: block; width: 100%; height: auto; transform: perspective(900px) rotateX(58deg); transform-origin: 28% 48.3%; }
+.tennis-ball-flight { position: absolute; top: var(--ball-top); left: var(--ball-left); width: var(--ball-size); height: var(--ball-size); transform-origin: 50% 100%; animation: tennis-dribble var(--tennis-cycle) linear infinite; }
+.tennis-ball-crop { position: absolute; inset: 0; overflow: clip; border-radius: 50%; }
+.tennis-ball-spin { position: absolute; width: 142%; max-width: none; height: 142%; left: -20%; top: -19%; animation: tennis-roll var(--tennis-cycle) linear infinite; }
+.tennis-floor-impact { position: absolute; bottom: 0; left: calc(var(--impact-left) - 27px); width: 54px; height: 3px; border-radius: 50%; background: radial-gradient(ellipse, #ffa4ad, #de354b88 50%, transparent 75%); opacity: 0; animation: tennis-impact var(--tennis-cycle) linear infinite; }
+@keyframes tennis-tap { 0%, 100% { transform: rotate(0deg); } 15%, 72% { transform: rotate(8deg); } }
+@keyframes tennis-dribble {
+  0% { transform: translateY(0) scale(1); animation-timing-function: cubic-bezier(.45, 0, .8, .5); }
+  44% { transform: translateY(var(--ball-drop)) scale(1); animation-timing-function: ease-out; }
+  46% { transform: translateY(var(--ball-drop)) scale(1.15, .85); }
+  50% { transform: translateY(var(--ball-drop)) scale(1); animation-timing-function: cubic-bezier(.15, .55, .35, 1); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes tennis-roll { to { transform: rotate(360deg); } }
+@keyframes tennis-impact { 0%, 40%, 55%, 100% { opacity: 0; transform: scaleX(.35); } 46% { opacity: .85; transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) {
- .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i { animation: none; }
+ .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i, .interest-gallery .tennis-loop { animation: none; }
+ .tennis-ball-flight { transform: translateY(var(--ball-drop)); }
  .interest-motion-control { display: none; }
 }

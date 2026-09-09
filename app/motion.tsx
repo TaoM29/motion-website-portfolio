@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
-import { useEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type PointerEvent, type RefObject } from 'react';
 import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { type ProjectWithImage } from './portfolio';
 
@@ -149,7 +149,6 @@ export function FeaturedProjects({ projects }: { projects: ProjectWithImage[] })
 }
 
 const interestObjects = [
-  { kind: 'tennis', image: '/images/tennis-accent.png', size: 1254 },
   { kind: 'vinyl', image: '/images/interests/vinyl-record.png', size: 1254 },
   { kind: 'strength', image: '/images/interests/dumbbell.png', size: 1254 },
   { kind: 'running', image: '/images/interests/running-shoe.png', size: 1254 },
@@ -182,8 +181,53 @@ function InterestObject({ object, index, progress, active }: { object: typeof in
   </div>;
 }
 
+function TennisDribble({ slot, gallery }: { slot: RefObject<HTMLDivElement | null>; gallery: RefObject<HTMLDivElement | null> }) {
+  const court = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const anchor = slot.current;
+    const container = gallery.current;
+    const layer = court.current;
+    if (!anchor || !container || !layer) return;
+    const update = () => {
+      const bounds = container.getBoundingClientRect();
+      const cell = anchor.getBoundingClientRect();
+      const left = cell.left - bounds.left;
+      const top = cell.top - bounds.top;
+      const size = Math.min(52, Math.max(28, cell.width * 0.17));
+      // The source racket's head is at (28%, 48.3%) in its 3:2 image.
+      const headX = left + cell.width * 0.28;
+      const headY = top + cell.width * (1024 / 1536) * 0.483;
+      const floor = container.clientHeight - 1;
+      const values = {
+        '--racket-left': left,
+        '--racket-top': top,
+        '--racket-width': cell.width,
+        '--ball-left': headX - size / 2,
+        '--ball-top': headY,
+        '--ball-size': size,
+        '--ball-drop': Math.max(0, floor - size - headY),
+        '--impact-left': headX,
+      };
+      Object.entries(values).forEach(([name, value]) => layer.style.setProperty(name, `${value}px`));
+      layer.dataset.ready = 'true';
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(anchor);
+    observer.observe(container);
+    window.addEventListener('resize', update);
+    update();
+    return () => { observer.disconnect(); window.removeEventListener('resize', update); };
+  }, [slot, gallery]);
+  return <div className="tennis-court" ref={court} aria-hidden="true">
+    <div className="tennis-racket"><div className="tennis-racket-strike tennis-loop"><img src="/images/interests/tennis-racket.png" alt="" width={1536} height={1024} loading="lazy" draggable={false} /></div></div>
+    <div className="tennis-ball-flight tennis-loop"><div className="tennis-ball-crop"><img className="tennis-ball-spin tennis-loop" src="/images/tennis-accent.png" alt="" width={1254} height={1254} loading="lazy" draggable={false} /></div></div>
+    <i className="tennis-floor-impact tennis-loop" />
+  </div>;
+}
+
 export function InterestObjects() {
   const ref = useRef<HTMLDivElement>(null);
+  const tennisSlot = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const inView = useInView(ref, { amount: 0.15 });
   const [paused, setPaused] = useState(false);
@@ -197,8 +241,10 @@ export function InterestObjects() {
   }, []);
   return <div className="interest-gallery" ref={ref} data-active={active}>
     <div className="interest-objects" aria-hidden="true">
-      {interestObjects.map((object, index) => <InterestObject key={object.kind} object={object} index={index} progress={scrollYProgress} active={active} />)}
+      <div className="interest-object interest-tennis-slot" ref={tennisSlot} />
+      {interestObjects.map((object, index) => <InterestObject key={object.kind} object={object} index={index + 1} progress={scrollYProgress} active={active} />)}
     </div>
+    <TennisDribble slot={tennisSlot} gallery={ref} />
     {!reduced && <div className="interest-motion-control"><button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume interest animations' : 'Pause interest animations'}>{paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}{paused ? 'Resume motion' : 'Pause motion'}</button></div>}
   </div>;
 }
