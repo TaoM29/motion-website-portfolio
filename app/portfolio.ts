@@ -4,7 +4,7 @@ export type Project = {
   description: string;
   status: 'Completed' | 'In progress';
   url?: string;
-  image?: { src: string; alt: string; caption?: string };
+  image?: { src: string; alt: string; width: number; height: number; caption?: string };
   tags: string[];
 };
 
@@ -25,7 +25,9 @@ export const portfolio = {
     { name: 'Data engineering & integrations', description: 'Python and SQL for data pipelines, ETL and API integrations. I connect information from different sources and prepare reliable data for analysis and reporting.' },
     { name: 'Databases & data modelling', description: 'PostgreSQL and Supabase for database design, data modelling and access control. I focus on organising data so it is consistent, secure and easy to work with.' },
     { name: 'Web development', description: 'TypeScript, React, Next.js and Tailwind CSS for responsive websites and applications. I work with reusable components, accessibility and multilingual design.' },
-    { name: 'LLMs & AI-assisted development', description: 'LLM-based information extraction, report automation and quality checks. I also use AI-assisted development to plan, build and review software.' },
+    { name: 'SEO optimisation', description: 'Technical SEO, page structure, metadata and multilingual search visibility. I work on making websites easier for search engines to understand and people to find.' },
+    { name: 'AI engineering & LLMs', description: 'LLM-based information extraction, prompt design and report automation. I build AI workflows with clear inputs and quality checks, and use AI-assisted development across my projects.' },
+    { name: 'Harness engineering & agent workflows', description: 'I’m researching and applying ways to give AI agents clear context, useful tools and well-defined tasks, with coordination, review and testing throughout development.' },
     { name: 'Testing & delivery', description: 'Git, GitHub, Docker and automated testing. My experience includes version control, quality assurance, and website deployment and configuration with Vercel and Cloudflare.' },
     { name: 'Business analysis & product development', description: 'Requirements analysis, process improvement and translating business needs into technical solutions. I enjoy working from the first question through development, delivery and feedback.' },
     { name: 'Academic foundations', description: 'A foundation in statistics, signal processing, algorithms and deep learning from my Data Science studies. I also have basic familiarity with dbt and cloud platforms.' },
@@ -40,7 +42,7 @@ export const portfolio = {
   projects: [
     {
       title: 'Predicting mucus plugs from lung CT scans',
-      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', caption: 'AI-generated illustration' },
+      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Master’s thesis',
       description: 'For my master’s thesis, I built a pipeline from raw lung CT images to estimates of mucus plug burden. I compared CNN models using fivefold cross-validation, evaluated predictions at patient level, and examined data leakage, uncertainty and generalisation. The thesis received an A.',
       status: 'Completed',
@@ -48,6 +50,7 @@ export const portfolio = {
     },
     {
       title: 'Personal Performance Intelligence',
+      image: { src: '/images/projects/personal-performance-illustration.png', alt: 'Tennis and training equipment with a simple activity trend, illustrating my personal performance project', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Personal project',
       description: 'I’m building a platform around my own interests in training, nutrition and tennis. It brings together Strava activity sync, Lifesum file imports and tennis records, with authenticated access and descriptive reports that can be traced back to their source. I’m continuing to develop the analysis, with particular attention to missing data and what the results can support.',
       status: 'In progress',
@@ -62,7 +65,7 @@ export const portfolio = {
     },
     {
       title: 'Energy & weather insights',
-      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Home page of my Energy & Weather Dashboard, with tools for exploring weather, energy production, consumption and forecasting' },
+      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Home page of my Energy & Weather Dashboard, with tools for exploring weather, energy production, consumption and forecasting', width: 2880, height: 1624 },
       category: 'Data analysis',
       description: 'I brought energy and weather data together in a Streamlit app, from collecting and checking the data to presenting the results. I explored seasonal patterns, forecasts, and the relationship between weather and energy use.',
       status: 'Completed',
@@ -77,6 +80,7 @@ export const portfolio = {
     },
     {
       title: 'Automated KPI reporting',
+      image: { src: '/images/projects/kpi-reporting-illustration.png', alt: 'Organised report sheets and a crimson bar chart illustrating automated KPI reporting', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Report automation',
       description: 'I built a language-model workflow to extract and organise information for KPI status reports, replacing a manual reporting process. I defined the KPIs, prompts and input rules, then checked the output for consistency and clarity.',
       status: 'Completed',
@@ -84,6 +88,7 @@ export const portfolio = {
     },
     {
       title: 'Liver cirrhosis risk modelling',
+      image: { src: '/images/projects/liver-risk-illustration.png', alt: 'A stylised liver model alongside data bars, illustrating liver risk modelling', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Predictive modelling',
       description: 'I developed a predictive model using structured patient data to explore liver cirrhosis risk. My work covered data cleaning, feature engineering, statistical modelling and evaluation, including how the data and model choices affected the reliability of predictions.',
       status: 'Completed',
@@ -91,6 +96,7 @@ export const portfolio = {
     },
     {
       title: 'Digital strategy for Cryos International',
+      image: { src: '/images/projects/digital-strategy-illustration.png', alt: 'Connected business systems around a central hub, illustrating digital strategy and integrated data', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Academic team project',
       description: 'In a team of four, I analysed Cryos International’s digital maturity, processes and systems. We proposed more standardised ways of working and better integrated data, weighing business needs against cost, risk and scalability. I contributed to coordination, quality checks and presenting our recommendations. The project received an A.',
       status: 'Completed',
