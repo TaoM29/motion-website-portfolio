@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { type ProjectWithImage } from './portfolio';
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -148,11 +148,57 @@ export function FeaturedProjects({ projects }: { projects: ProjectWithImage[] })
   </div>;
 }
 
-export function TennisAccent() {
+const interestObjects = [
+  { kind: 'tennis', image: '/images/tennis-accent.png', size: 1254 },
+  { kind: 'vinyl', image: '/images/interests/vinyl-record.png', size: 1254 },
+  { kind: 'strength', image: '/images/interests/dumbbell.png', size: 1254 },
+  { kind: 'running', image: '/images/interests/running-shoe.png', size: 1254 },
+] as const;
+
+function InterestObject({ object, index, progress, active }: { object: typeof interestObjects[number]; index: number; progress: MotionValue<number>; active: boolean }) {
+  const pointerEnabled = useMotionEnabled('(hover: hover) and (pointer: fine)');
+  const targetX = useMotionValue(0);
+  const targetY = useMotionValue(0);
+  const x = useSpring(targetX, { stiffness: 130, damping: 16 });
+  const y = useSpring(targetY, { stiffness: 130, damping: 16 });
+  const rotateX = useTransform(y, [-12, 12], [7, -7]);
+  const rotateY = useTransform(x, [-14, 14], [-9, 9]);
+  const scrollY = useTransform(progress, [0, 1], index % 2 ? [-12, 16] : [20, -20]);
+  const scrollRotate = useTransform(progress, [0, 1], index % 2 ? [7, -7] : [-7, 7]);
+  const reset = () => { targetX.set(0); targetY.set(0); };
+  const move = (event: PointerEvent<HTMLDivElement>) => {
+    if (!pointerEnabled || !active || event.pointerType !== 'mouse') return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    targetX.set(((event.clientX - rect.left) / rect.width - 0.5) * 28);
+    targetY.set(((event.clientY - rect.top) / rect.height - 0.5) * 24);
+  };
+  return <div className={`interest-object interest-${object.kind}`} onPointerMove={move} onPointerLeave={reset} onPointerCancel={reset}>
+    <motion.div className="interest-drift" style={active ? { y: scrollY, rotate: scrollRotate } : { y: 0, rotate: 0 }}>
+      <motion.div className="interest-tilt" style={active && pointerEnabled ? { x, y, rotateX, rotateY, transformPerspective: 800 } : { x: 0, y: 0, rotateX: 0, rotateY: 0 }}>
+        <div className="interest-object-angle"><img className="interest-loop" src={object.image} alt="" width={object.size} height={object.size} loading="lazy" draggable={false} /></div>
+      </motion.div>
+    </motion.div>
+    {object.kind === 'vinyl' && <div className="interest-equalizer">{[0, 1, 2, 3, 4, 5, 6].map(bar => <i key={bar} style={{ animationDelay: `${bar * -0.19}s` }} />)}</div>}
+  </div>;
+}
+
+export function InterestObjects() {
   const ref = useRef<HTMLDivElement>(null);
-  const enabled = useMotionEnabled();
+  const reduced = useReducedMotion();
+  const inView = useInView(ref, { amount: 0.15 });
+  const [paused, setPaused] = useState(false);
+  const [pageVisible, setPageVisible] = useState(true);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const rotate = useTransform(scrollYProgress, [0, 1], [-24, 36]);
-  const y = useTransform(scrollYProgress, [0, 1], [36, -48]);
-  return <div className="tennis-accent" ref={ref} aria-hidden="true"><motion.img src="/images/tennis-accent.png" alt="" width={1254} height={1254} loading="lazy" style={enabled ? { y, rotate } : { y: 0, rotate: 0 }} /></div>;
+  const active = inView && pageVisible && !reduced && !paused;
+  useEffect(() => {
+    const update = () => setPageVisible(!document.hidden);
+    document.addEventListener('visibilitychange', update);
+    return () => document.removeEventListener('visibilitychange', update);
+  }, []);
+  return <div className="interest-gallery" ref={ref} data-active={active}>
+    <div className="interest-objects" aria-hidden="true">
+      {interestObjects.map((object, index) => <InterestObject key={object.kind} object={object} index={index} progress={scrollYProgress} active={active} />)}
+    </div>
+    {!reduced && <div className="interest-motion-control"><button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume interest animations' : 'Pause interest animations'}>{paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}{paused ? 'Resume motion' : 'Pause motion'}</button></div>}
+  </div>;
 }

@@ -4,7 +4,7 @@ import { motion, MotionConfig, useMotionValue, useReducedMotion, useScroll, useS
 import { ArrowDown, ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { portfolio, hasProjectImage, type Project } from './portfolio';
-import { FeaturedProjects, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, TennisAccent } from './motion';
+import { FeaturedProjects, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, InterestObjects } from './motion';
 
 const revealEase = [0.22, 1, 0.36, 1] as const;
 function Reveal({ children, className = '', delay = 0, distance = 42 }: { children: ReactNode; className?: string; delay?: number; distance?: number }) {
@@ -175,11 +175,12 @@ function Interests() {
   return <section className="section interests-section" id="interests">
     <SectionLabel>Outside work</SectionLabel>
     <div className="interests-content">
-      <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2><TennisAccent /></Reveal>
+      <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2></Reveal>
       <div>
         <Reveal delay={0.1}>{portfolio.outsideWork.map(paragraph => <p className="interests-intro" key={paragraph}>{paragraph}</p>)}</Reveal>
       </div>
     </div>
+    <InterestObjects />
   </section>;
 }
 
