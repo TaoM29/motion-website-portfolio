@@ -40,12 +40,10 @@ export const portfolio = {
     { name: 'Communication & collaboration', description: 'Explaining technical work, coordinating tasks and working with clients and colleagues. I value clear communication and shared priorities, and speak Norwegian, English and Arabic.' },
   ],
   outsideWork: [
-    'A good day for me means waking up with time for the things I enjoy and the people I care about. My friends would describe me as quick to learn, adaptable, and someone they can come to for advice.',
-    'Tennis, strength training and running give me a way to compete, push myself and clear my head. I like the mentality of getting stronger and not giving up. Taking care of my body and mind also helps me feel sharper at work.',
-    'Music is another big part of my life, especially house music. I DJ myself, so it’s something I enjoy both listening to and playing.',
-    'Looking ahead, I want to keep doing what I enjoy, stay healthy and active, and hopefully travel around the world one day.',
+    'Outside work, I spend a lot of time playing tennis, strength training and running. I enjoy the competition, and training helps me clear my head and stay focused.',
+    'I also DJ and listen to a lot of house music.',
+    'I like being around people and making time for friends. Keeping a balance between work, training and a social life matters to me.',
   ],
-  interests: ['Tennis', 'Strength training', 'Running', 'House music & DJing', 'Time with friends'],
   contact: [
     { label: 'tawfik.muhriz@gmail.com', href: 'mailto:tawfik.muhriz@gmail.com' },
     { label: 'GitHub', href: 'https://github.com/TaoM29' },

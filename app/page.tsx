@@ -7,19 +7,9 @@ import { portfolio, hasProjectImage, type Project } from './portfolio';
 import { FeaturedProjects, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, TennisAccent } from './motion';
 
 const revealEase = [0.22, 1, 0.36, 1] as const;
-const listItem = {
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: revealEase } },
-};
-
 function Reveal({ children, className = '', delay = 0, distance = 42 }: { children: ReactNode; className?: string; delay?: number; distance?: number }) {
   const reducedMotion = useReducedMotion();
   return <motion.div className={className} initial={reducedMotion ? false : { opacity: 0, y: distance }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 0.9, delay, ease: revealEase }}>{children}</motion.div>;
-}
-
-function StaggerList({ children, className }: { children: ReactNode; className: string }) {
-  const reducedMotion = useReducedMotion();
-  return <motion.ul className={className} initial={reducedMotion ? false : 'hidden'} whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={{ visible: { transition: { staggerChildren: reducedMotion ? 0 : 0.12 } } }}>{children}</motion.ul>;
 }
 
 function Portrait({ progress }: { progress: MotionValue<number> }) {
@@ -188,7 +178,6 @@ function Interests() {
       <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2><TennisAccent /></Reveal>
       <div>
         <Reveal delay={0.1}>{portfolio.outsideWork.map(paragraph => <p className="interests-intro" key={paragraph}>{paragraph}</p>)}</Reveal>
-        <StaggerList className="interests-list">{portfolio.interests.map(interest => <motion.li variants={listItem} key={interest}>{interest}</motion.li>)}</StaggerList>
       </div>
     </div>
   </section>;
