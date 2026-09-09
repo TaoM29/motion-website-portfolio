@@ -19,7 +19,7 @@ export function hasProjectImage(project: Project): project is ProjectWithImage {
 // Reviewed the ten most recently modified CV PDFs on 2026-09-09; project notes clarify older CV claims.
 export const portfolio = {
   name: 'Taofik Muhriz',
-  introduction: 'I’m a data scientist with an MSc from NMBU. I work on machine learning, data tools, and websites — and enjoy working with the people who use them.',
+  introduction: 'I’m a data scientist with an MSc from NMBU. I work on machine learning, data tools, and websites and enjoy working with the people who use them.',
   about: 'I’m 24, based in Fredrikstad, and I enjoy turning data into insight that people can use. I’m happiest working on a product from end to end: understanding the question, exploring the data, building the solution, and following it through to a finished product.',
   aboutWork: 'My projects range from analysing lung CT scans to building websites for clients. I like getting into the technical details and talking with the people I’m building for. Those conversations help me work out what matters, make better choices, and improve the result as I go.',
   background: 'I completed a five-year MSc in Data Science at NMBU (2021–2026), specialising in Business Analytics. My master’s thesis explored predictions from lung CT scans and received an A. Alongside my studies, work in healthcare and hospitality taught me to collaborate, communicate clearly, and stay calm when things get busy.',
@@ -48,7 +48,7 @@ export const portfolio = {
   projects: [
     {
       title: 'Predicting mucus plugs from lung CT scans',
-      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', width: 1536, height: 1024, caption: 'AI-generated illustration · Lung CT research', fit: 'artwork' },
+      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', width: 1536, height: 1024, caption: 'AI-generated illustration of Lung CT images', fit: 'artwork' },
       category: 'Master’s thesis',
       description: 'For my master’s thesis, I built a pipeline from raw lung CT images to estimates of mucus plug burden. I compared CNN models using fivefold cross-validation, evaluated predictions at patient level, and examined data leakage, uncertainty and generalisation. The thesis received an A.',
       status: 'Completed',
@@ -56,7 +56,7 @@ export const portfolio = {
     },
     {
       title: 'Personal Performance Intelligence',
-      image: { src: '/images/projects/personal-performance-overview.png', alt: 'Personal Performance Intelligence overview design showing training, tennis, nutrition and activity summaries', width: 2880, height: 1800, caption: 'Overview design · A personal project in development' },
+      image: { src: '/images/projects/personal-performance-overview.png', alt: 'Personal Performance Intelligence overview design showing training, tennis, nutrition and activity summaries', width: 2880, height: 1800, caption: 'Overview design of a personal performance intelligence in development' },
       category: 'Personal project',
       description: 'I’m building a platform around my own interests in training, nutrition and tennis. It brings together Strava activity sync, Lifesum file imports and tennis records, with authenticated access and descriptive reports that can be traced back to their source. I’m continuing to develop the analysis, with particular attention to missing data and what the results can support.',
       status: 'In progress',
