@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { portfolio, type Project } from './portfolio';
+import { type ProjectWithImage } from './portfolio';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -82,6 +82,7 @@ export function SkillItem({ name, description, index }: { name: string; descript
 
 const visuals = [
   { image: '/images/projects/energy-weather-dashboard.png', title: 'Energy & Weather', detail: 'Interactive dashboard', fit: 'cover' },
+  { image: '/images/projects/personal-performance-overview.png', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
   { image: '/images/projects/altawfiq-en.png', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
   { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
   { image: '/images/projects/morris-marine.png', title: 'Morris Marine', detail: 'Website in development', fit: 'cover' },
@@ -106,35 +107,44 @@ export function ProjectRibbon() {
   </section>;
 }
 
-const featureDefinitions = [
-  { title: 'Predicting mucus plugs from lung CT scans', image: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging, with layered scans and subtle crimson highlights', caption: 'AI-generated illustration · Lung CT research', fit: 'artwork' },
-  { title: 'AL-TAWFIQ Trading Group', image: '/images/projects/altawfiq-en.png', alt: 'English homepage of the AL-TAWFIQ website I developed', caption: 'English and Arabic web development', fit: 'cover' },
-  { title: 'Morris Marine', image: '/images/projects/morris-marine.png', alt: 'Current homepage of the Morris Marine website I am developing', caption: 'A client website in development', fit: 'cover' },
-] as const;
-export const featuredTitles = featureDefinitions.map(feature => feature.title);
-
-function StackedProject({ project, index, progress, enabled }: { project: Project; index: number; progress: MotionValue<number>; enabled: boolean }) {
-  const visual = featureDefinitions[index];
-  const targetScale = 1 - (featureDefinitions.length - 1 - index) * 0.045;
-  const scale = useTransform(progress, [index * 0.28, 1], [1, targetScale]);
-  const rotateX = useTransform(progress, [index * 0.28, 1], [0, -(featureDefinitions.length - 1 - index) * 2]);
+function StackedProject({ project, index, count, top, progress, enabled }: { project: ProjectWithImage; index: number; count: number; top: number; progress: MotionValue<number>; enabled: boolean }) {
+  const visual = project.image;
+  const depth = (count - 1 - index) / Math.max(count - 1, 1);
+  const foldStart = index / count * 0.85;
+  const scale = useTransform(progress, [foldStart, 1], [1, 1 - depth * 0.1]);
+  const rotateX = useTransform(progress, [foldStart, 1], [0, -depth * 4]);
   const imageY = useTransform(progress, [0, 1], [10, -10]);
-  return <motion.article className="stacked-project" style={enabled ? { top: 68 + index * 26, scale, rotateX, transformPerspective: 1500, zIndex: index + 1 } : { top: 0, scale: 1, rotateX: 0, zIndex: index + 1 }}>
+  return <motion.article className="stacked-project" style={enabled ? { top, scale, rotateX, transformPerspective: 1500, zIndex: index + 1 } : { top: 0, scale: 1, rotateX: 0, zIndex: index + 1 }}>
     <div className="stacked-copy">
       <div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div>
       <h3>{project.title}</h3><p>{project.description}</p>
       <ul className="project-tags" aria-label="Project topics">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
     </div>
-    <figure className={`stacked-visual ${visual.fit}`}><div className="stacked-image"><motion.img src={visual.image} alt={visual.alt} loading="lazy" style={enabled && visual.fit === 'cover' ? { y: imageY } : { y: 0 }} /></div><figcaption>{visual.caption}</figcaption></figure>
+    <figure className={`stacked-visual ${visual.fit ?? 'cover'}`}><div className="stacked-image"><motion.img src={visual.src} alt={visual.alt} width={visual.width} height={visual.height} loading="lazy" style={enabled && visual.fit !== 'artwork' ? { y: imageY } : { y: 0 }} /></div>{visual.caption && <figcaption>{visual.caption}</figcaption>}</figure>
   </motion.article>;
 }
 
-export function FeaturedProjects() {
+export function FeaturedProjects({ projects }: { projects: ProjectWithImage[] }) {
   const stack = useRef<HTMLDivElement>(null);
-  const enabled = useMotionEnabled('(min-width: 1001px) and (min-height: 800px)');
+  const motionEnabled = useMotionEnabled('(min-width: 1001px) and (min-height: 800px)');
+  const [cardsFit, setCardsFit] = useState(false);
+  const stackStep = Math.min(26, 78 / Math.max(projects.length - 1, 1));
+  const enabled = motionEnabled && cardsFit;
   const { scrollYProgress } = useScroll({ target: stack, offset: ['start start', 'end end'] });
+
+  useEffect(() => {
+    const cards = Array.from(stack.current?.children ?? []) as HTMLElement[];
+    // Fold only when every card's content fits below its sticky position.
+    const update = () => setCardsFit(cards.every((card, index) => card.offsetHeight + 68 + index * stackStep <= window.innerHeight - 24));
+    const observer = new ResizeObserver(update);
+    cards.forEach(card => observer.observe(card));
+    window.addEventListener('resize', update);
+    update();
+    return () => { observer.disconnect(); window.removeEventListener('resize', update); };
+  }, [projects, stackStep]);
+
   return <div ref={stack} className="project-stack" data-motion={enabled}>
-    {featureDefinitions.map((feature, index) => <StackedProject key={feature.title} project={portfolio.projects.find(project => project.title === feature.title)!} index={index} progress={scrollYProgress} enabled={enabled} />)}
+    {projects.map((project, index) => <StackedProject key={project.title} project={project} index={index} count={projects.length} top={68 + index * stackStep} progress={scrollYProgress} enabled={enabled} />)}
   </div>;
 }
 

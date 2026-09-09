@@ -4,9 +4,15 @@ export type Project = {
   description: string;
   status: 'Completed' | 'In progress';
   url?: string;
-  image?: { src: string; alt: string; width: number; height: number; caption?: string };
+  image?: { src: string; alt: string; width: number; height: number; caption?: string; fit?: 'cover' | 'artwork' };
   tags: string[];
 };
+
+export type ProjectWithImage = Project & { image: NonNullable<Project['image']> };
+
+export function hasProjectImage(project: Project): project is ProjectWithImage {
+  return Boolean(project.image);
+}
 
 // Personal facts: job-application/CV, PROJECTS.md and SKILLS.md (September 2026).
 // Age, interests and completed KPI status: supplied directly by Taofik.
@@ -42,7 +48,7 @@ export const portfolio = {
   projects: [
     {
       title: 'Predicting mucus plugs from lung CT scans',
-      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', width: 1536, height: 1024, caption: 'AI-generated illustration' },
+      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', width: 1536, height: 1024, caption: 'AI-generated illustration · Lung CT research', fit: 'artwork' },
       category: 'Master’s thesis',
       description: 'For my master’s thesis, I built a pipeline from raw lung CT images to estimates of mucus plug burden. I compared CNN models using fivefold cross-validation, evaluated predictions at patient level, and examined data leakage, uncertainty and generalisation. The thesis received an A.',
       status: 'Completed',
@@ -50,7 +56,7 @@ export const portfolio = {
     },
     {
       title: 'Personal Performance Intelligence',
-      image: { src: '/images/projects/personal-performance-illustration.png', alt: 'Tennis and training equipment with a simple activity trend, illustrating my personal performance project', width: 1536, height: 1024, caption: 'AI-generated illustration' },
+      image: { src: '/images/projects/personal-performance-overview.png', alt: 'Personal Performance Intelligence overview design showing training, tennis, nutrition and activity summaries', width: 2880, height: 1800, caption: 'Overview design · A personal project in development' },
       category: 'Personal project',
       description: 'I’m building a platform around my own interests in training, nutrition and tennis. It brings together Strava activity sync, Lifesum file imports and tennis records, with authenticated access and descriptive reports that can be traced back to their source. I’m continuing to develop the analysis, with particular attention to missing data and what the results can support.',
       status: 'In progress',
@@ -58,6 +64,7 @@ export const portfolio = {
     },
     {
       title: 'AL-TAWFIQ Trading Group',
+      image: { src: '/images/projects/altawfiq-en.png', alt: 'English homepage of the AL-TAWFIQ website I developed', width: 1440, height: 960, caption: 'English and Arabic web development' },
       category: 'Client work',
       description: 'I built the company’s website in English and Arabic, including layouts that work in both reading directions. The public site is live. I’m continuing to work on customer data and subscriptions as part of the same project.',
       status: 'In progress',
@@ -65,7 +72,7 @@ export const portfolio = {
     },
     {
       title: 'Energy & weather insights',
-      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Home page of my Energy & Weather Dashboard, with tools for exploring weather, energy production, consumption and forecasting', width: 2880, height: 1624 },
+      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Home page of my Energy & Weather Dashboard, with tools for exploring weather, energy production, consumption and forecasting', width: 2880, height: 1624, caption: 'Energy and weather exploration in Streamlit' },
       category: 'Data analysis',
       description: 'I brought energy and weather data together in a Streamlit app, from collecting and checking the data to presenting the results. I explored seasonal patterns, forecasts, and the relationship between weather and energy use.',
       status: 'Completed',
@@ -73,6 +80,7 @@ export const portfolio = {
     },
     {
       title: 'Morris Marine',
+      image: { src: '/images/projects/morris-marine.png', alt: 'Current homepage of the Morris Marine website I am developing', width: 1440, height: 960, caption: 'A client website in development' },
       category: 'Client work',
       description: 'I’m making a website for a maritime business, organising its company information and services into clear pages. The layout and navigation are implemented, and I’m still working on the site before launch.',
       status: 'In progress',
@@ -80,7 +88,6 @@ export const portfolio = {
     },
     {
       title: 'Automated KPI reporting',
-      image: { src: '/images/projects/kpi-reporting-illustration.png', alt: 'Organised report sheets and a crimson bar chart illustrating automated KPI reporting', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Report automation',
       description: 'I built a language-model workflow to extract and organise information for KPI status reports, replacing a manual reporting process. I defined the KPIs, prompts and input rules, then checked the output for consistency and clarity.',
       status: 'Completed',
@@ -88,7 +95,6 @@ export const portfolio = {
     },
     {
       title: 'Liver cirrhosis risk modelling',
-      image: { src: '/images/projects/liver-risk-illustration.png', alt: 'A stylised liver model alongside data bars, illustrating liver risk modelling', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Predictive modelling',
       description: 'I developed a predictive model using structured patient data to explore liver cirrhosis risk. My work covered data cleaning, feature engineering, statistical modelling and evaluation, including how the data and model choices affected the reliability of predictions.',
       status: 'Completed',
@@ -96,7 +102,6 @@ export const portfolio = {
     },
     {
       title: 'Digital strategy for Cryos International',
-      image: { src: '/images/projects/digital-strategy-illustration.png', alt: 'Connected business systems around a central hub, illustrating digital strategy and integrated data', width: 1536, height: 1024, caption: 'AI-generated illustration' },
       category: 'Academic team project',
       description: 'In a team of four, I analysed Cryos International’s digital maturity, processes and systems. We proposed more standardised ways of working and better integrated data, weighing business needs against cost, risk and scalability. I contributed to coordination, quality checks and presenting our recommendations. The project received an A.',
       status: 'Completed',

@@ -3,8 +3,8 @@
 import { motion, MotionConfig, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
-import { portfolio, type Project } from './portfolio';
-import { FeaturedProjects, featuredTitles, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, TennisAccent } from './motion';
+import { portfolio, hasProjectImage, type Project } from './portfolio';
+import { FeaturedProjects, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, TennisAccent } from './motion';
 
 const revealEase = [0.22, 1, 0.36, 1] as const;
 const listItem = {
@@ -172,11 +172,12 @@ function ProjectEntry({ project }: { project: Project }) {
 
 function Projects() {
   const [filter, setFilter] = useState<'All work' | Project['status']>('All work');
-  const showFeatured = filter === 'All work';
-  const visible = portfolio.projects.filter(project => showFeatured ? !featuredTitles.includes(project.title as typeof featuredTitles[number]) : project.status === filter);
+  const visible = portfolio.projects.filter(project => filter === 'All work' || project.status === filter);
+  const illustrated = visible.filter(hasProjectImage);
+  const withoutImages = visible.filter(project => !project.image);
   return <section className="section projects-section" id="projects"><SectionLabel>Projects</SectionLabel><div className="section-heading"><Reveal><h2>What I’ve<br /><span className="muted-word">been working on.</span></h2></Reveal><Reveal className="section-summary" delay={0.14}><p>Research from my studies, projects for clients,<br />and a few things I’m building for myself.</p></Reveal></div>
     <Reveal distance={24}><div className="project-filters" role="group" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</div></Reveal>
-    <div className="project-results" aria-live="polite">{showFeatured && <FeaturedProjects />}{visible.length ? visible.map(project => <ProjectEntry key={project.title} project={project} />) : <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
+    <div className="project-results" aria-live="polite">{illustrated.length > 0 && <FeaturedProjects key={filter} projects={illustrated} />}{withoutImages.map(project => <ProjectEntry key={project.title} project={project} />)}{visible.length === 0 && <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
   </section>;
 }
 
