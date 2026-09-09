@@ -259,8 +259,8 @@ h3 { font-weight: 400; }
 .interest-running .interest-loop { animation: interest-stride 2.8s cubic-bezier(.45, 0, .3, 1) infinite; }
 .interest-equalizer { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 22px; display: flex; align-items: center; gap: 4px; opacity: .75; }
 .interest-equalizer i { width: 3px; height: 100%; border-radius: 3px; background: #ef6578; transform: scaleY(.35); animation: interest-beat 1.15s ease-in-out infinite alternate; }
-.interest-gallery .interest-loop, .interest-gallery .interest-equalizer i, .interest-gallery .tennis-loop { animation-play-state: paused; }
-.interest-gallery[data-active='true'] .interest-loop, .interest-gallery[data-active='true'] .interest-equalizer i, .interest-gallery[data-active='true'] .tennis-loop { animation-play-state: running; }
+.interest-gallery .interest-loop, .interest-gallery .interest-equalizer i { animation-play-state: paused; }
+.interest-gallery[data-active='true'] .interest-loop, .interest-gallery[data-active='true'] .interest-equalizer i { animation-play-state: running; }
 .interest-motion-control { display: flex; justify-content: flex-end; margin-top: 8px; }
 .interest-motion-control button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: .875rem; cursor: pointer; }
 .interest-motion-control button:hover { color: var(--silver); border-color: var(--line); }
@@ -277,27 +277,17 @@ h3 { font-weight: 400; }
  .interest-motion-control { justify-content: flex-start; }
 }
 
-.tennis-court { position: absolute; inset: 0; overflow: clip; pointer-events: none; mix-blend-mode: lighten; visibility: hidden; --tennis-cycle: 1.8s; }
-.tennis-court[data-ready='true'] { visibility: visible; }
-.tennis-racket { position: absolute; left: var(--racket-left); top: var(--racket-top); width: var(--racket-width); }
-.tennis-racket-strike { transform-origin: 86% 48.3%; animation: tennis-tap var(--tennis-cycle) ease-in-out infinite; }
-.tennis-racket img { display: block; width: 100%; height: auto; transform: perspective(900px) rotateX(58deg); transform-origin: 28% 48.3%; }
-.tennis-ball-flight { position: absolute; top: var(--ball-top); left: var(--ball-left); width: var(--ball-size); height: var(--ball-size); transform-origin: 50% 100%; animation: tennis-dribble var(--tennis-cycle) linear infinite; }
-.tennis-ball-crop { position: absolute; inset: 0; overflow: clip; border-radius: 50%; }
-.tennis-ball-spin { position: absolute; width: 142%; max-width: none; height: 142%; left: -20%; top: -19%; animation: tennis-roll var(--tennis-cycle) linear infinite; }
-.tennis-floor-impact { position: absolute; bottom: 0; left: calc(var(--impact-left) - 27px); width: 54px; height: 3px; border-radius: 50%; background: radial-gradient(ellipse, #ffa4ad, #de354b88 50%, transparent 75%); opacity: 0; animation: tennis-impact var(--tennis-cycle) linear infinite; }
-@keyframes tennis-tap { 0%, 100% { transform: rotate(0deg); } 15%, 72% { transform: rotate(8deg); } }
-@keyframes tennis-dribble {
-  0% { transform: translateY(0) scale(1); animation-timing-function: cubic-bezier(.45, 0, .8, .5); }
-  44% { transform: translateY(var(--ball-drop)) scale(1); animation-timing-function: ease-out; }
-  46% { transform: translateY(var(--ball-drop)) scale(1.15, .85); }
-  50% { transform: translateY(var(--ball-drop)) scale(1); animation-timing-function: cubic-bezier(.15, .55, .35, 1); }
-  100% { transform: translateY(0) scale(1); }
-}
-@keyframes tennis-roll { to { transform: rotate(360deg); } }
-@keyframes tennis-impact { 0%, 40%, 55%, 100% { opacity: 0; transform: scaleX(.35); } 46% { opacity: .85; transform: scaleX(1); } }
+.tennis-court { position: absolute; inset: 0; overflow: clip; pointer-events: none; }
+.tennis-canvas, .tennis-fallback { position: absolute; inset: 0; }
+.tennis-canvas { visibility: hidden; }
+.tennis-canvas canvas { display: block; width: 100%; height: 100%; }
+.tennis-court[data-rendered='true'] .tennis-canvas { visibility: visible; }
+.tennis-court[data-rendered='true'] .tennis-fallback { display: none; }
+.tennis-fallback { mix-blend-mode: lighten; }
+.tennis-fallback-racket { position: absolute; left: var(--racket-left); top: var(--racket-top); width: var(--racket-width); height: auto; }
+.tennis-fallback-ball { position: absolute; left: var(--ball-left); bottom: 1px; width: 30px; height: 30px; overflow: clip; border-radius: 50%; }
+.tennis-fallback-ball img { position: absolute; width: 142%; max-width: none; height: 142%; left: -20%; top: -19%; }
 @media (prefers-reduced-motion: reduce) {
- .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i, .interest-gallery .tennis-loop { animation: none; }
- .tennis-ball-flight { transform: translateY(var(--ball-drop)); }
+ .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i { animation: none; }
  .interest-motion-control { display: none; }
 }
