@@ -21,3 +21,9 @@ Run `npm run build` and `npx tsc --noEmit --incremental false`.
 Final corrective image prompt:
 
 > Correct the generated shoulder bust using the original polished 3D cartoon style and the real adult person's identity. Make a stylized 3D character with larger expressive brown eyes and smooth sculpted forms, preserving the recognizable face, short black hair, thick eyebrows, warm complexion, striped open-collar shirt and silver chain. Replace the checkerboard with uniform near-black #08090b. Full centered head and shoulder bust, all silhouette edges inside the portrait canvas. Soft silver studio lighting and subtle crimson rim highlights. No earrings, tall hairstyle, superhero elements, props, text, or watermark.
+
+## Suit portrait update
+
+The current asset is `public/images/personal-avatar-suit.png`, edited with built-in imagegen. The hover movement now follows the pointer up to 72px horizontally and 56px vertically with spring easing and a gentle tilt. The stationary hover region avoids movement feedback; reduced-motion preferences disable the effect.
+
+Image edit prompt: Change only the clothing to a tailored charcoal suit jacket, crisp white collared shirt buttoned to the neck, and neatly knotted deep burgundy tie. Cover the necklace. Preserve the original face, identity, expression, hair, 3D style, proportions, rounded bust framing, 1024×1536 canvas, lighting and dark background. No text, logos, accessories or new objects.

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, MotionConfig, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
+import { motion, MotionConfig, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Mail, Plus } from 'lucide-react';
 import { type PointerEvent, type ReactNode, useState } from 'react';
 import { portfolio, type Project } from './portfolio';
@@ -12,20 +12,32 @@ function Reveal({ children, className = '' }: { children: ReactNode; className?:
 
 function Portrait() {
   const reducedMotion = useReducedMotion();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(y, { stiffness: 120, damping: 20 });
-  const rotateY = useSpring(x, { stiffness: 120, damping: 20 });
+  const targetX = useMotionValue(0);
+  const targetY = useMotionValue(0);
+  const x = useSpring(targetX, { stiffness: 95, damping: 17, mass: 0.8 });
+  const y = useSpring(targetY, { stiffness: 95, damping: 17, mass: 0.8 });
+  const rotateX = useTransform(y, [-56, 56], [7, -7]);
+  const rotateY = useTransform(x, [-72, 72], [-9, 9]);
+
+  function reset() {
+    targetX.set(0);
+    targetY.set(0);
+  }
+
   function move(event: PointerEvent<HTMLDivElement>) {
     if (reducedMotion || event.pointerType !== 'mouse') return;
+    // Measure the stationary stage, so movement never shifts the hover target.
     const bounds = event.currentTarget.getBoundingClientRect();
-    x.set(((event.clientX - bounds.left) / bounds.width - 0.5) * 13);
-    y.set(-((event.clientY - bounds.top) / bounds.height - 0.5) * 9);
+    const horizontal = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1));
+    const vertical = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1));
+    const horizontalTravel = Math.min(72, Math.max(12, (window.innerWidth - bounds.width) / 2 - 8));
+    targetX.set(horizontal * horizontalTravel);
+    targetY.set(vertical * 56);
   }
-  return <div className="portrait-stage" onPointerMove={move} onPointerLeave={() => { x.set(0); y.set(0); }}>
+  return <div className="portrait-stage" onPointerMove={move} onPointerLeave={reset} onPointerCancel={reset}>
     <div className="portrait-halo" aria-hidden="true" />
-    <motion.div className="portrait-tilt" style={{ rotateX, rotateY }}>
-      <div className="portrait-float"><img className="portrait" src="/images/personal-avatar.png" width="1024" height="1536" alt="3D illustrated portrait of Taofik Muhriz with short dark hair and a striped shirt" fetchPriority="high" draggable={false} /></div>
+    <motion.div className="portrait-tilt" style={reducedMotion ? { x: 0, y: 0, rotateX: 0, rotateY: 0 } : { x, y, rotateX, rotateY }}>
+      <div className="portrait-float"><img className="portrait" src="/images/personal-avatar-suit.png" width="1024" height="1536" alt="3D illustrated portrait of Taofik Muhriz wearing a charcoal suit, white shirt, and burgundy tie" fetchPriority="high" draggable={false} /></div>
     </motion.div>
   </div>;
 }

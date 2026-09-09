@@ -30,6 +30,7 @@ p, h1, h2, h3 { margin: 0; }
 .portrait-stage { position: absolute; top: 39%; bottom: 58px; left: 50%; width: min(46vw, 520px); transform: translateX(-50%); perspective: 1000px; z-index: 2; }
 .portrait-halo { position: absolute; width: 120%; height: 70%; top: 15%; left: -10%; border-radius: 50%; background: radial-gradient(ellipse, #94192b35, #411e3020 42%, transparent 68%); filter: blur(30px); }
 .portrait-tilt, .portrait-float { height: 100%; }
+.portrait-tilt { pointer-events: none; will-change: transform; }
 .portrait { height: 100%; width: 100%; object-fit: contain; object-position: bottom; user-select: none; filter: drop-shadow(0 24px 35px #0009); }
 .portrait-float { animation: hover-drift 7s ease-in-out infinite; }
 @keyframes hover-drift { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
