@@ -56,7 +56,7 @@ test('the racket has a solid 3D frame, open centre, strings and volume in the gr
   assert.ok(bounds.z > 6);
   const ray = new Raycaster(new Vector3(0, 0, 30), new Vector3(0, 0, -1));
   assert.equal(ray.intersectObject(frame).length, 0, 'the hoop centre should be open');
-  ray.set(new Vector3(48, 0, 30), new Vector3(0, 0, -1));
+  ray.set(new Vector3(51, 0, 30), new Vector3(0, 0, -1));
   assert.ok(ray.intersectObject(frame).length > 0, 'the frame should have an actual front surface');
   // Check the actual open throat, including where the old brace crossed it.
   for (const [x, y] of [[58, -12], [62, 0], [58, 12], [68, 0], [76, 0]]) {
@@ -70,6 +70,13 @@ test('the racket has a solid 3D frame, open centre, strings and volume in the gr
   const grip = new Box3().setFromObject(racket.getObjectByName('Wrapped grip')).getSize(new Vector3());
   assert.ok(grip.y > 9 && grip.z > 9);
   assert.ok(racket.getObjectByName('Woven string bed').geometry.attributes.position.count > 100);
+  let triangles = 0;
+  racket.traverse(object => {
+    if (!object.isMesh) return;
+    assert.ok(object.geometry.attributes.position.array.every(Number.isFinite), 'all model surfaces must have finite coordinates');
+    triangles += (object.geometry.index?.count ?? object.geometry.attributes.position.count) / 3;
+  });
+  assert.ok(triangles < 80000, 'racket detail must stay within the animation rendering budget');
   const ball = new Box3().setFromObject(createTennisBall()).getSize(new Vector3());
   assert.ok(ball.x >= 2 && ball.y >= 2 && ball.z >= 2);
 });
