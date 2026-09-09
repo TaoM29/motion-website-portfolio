@@ -78,14 +78,14 @@ function Portrait({ progress }: { progress: MotionValue<number> }) {
   </div>;
 }
 
-function TypedLine({ text, delay, pace, className = '' }: { text: string; delay: number; pace: number; className?: string }) {
+function TypedLine({ text, delay, pace, className = '', enabled = true, onSettled }: { text: string; delay: number; pace: number; className?: string; enabled?: boolean; onSettled?: () => void }) {
   const reducedMotion = useReducedMotion();
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
   const characters = Array.from(text);
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || !enabled) return;
     let timeout = 0;
     let current = 0;
     setCount(0);
@@ -94,32 +94,45 @@ function TypedLine({ text, delay, pace, className = '' }: { text: string; delay:
       setStarted(true);
       current += 1;
       setCount(current);
-      if (current < text.length) timeout = window.setTimeout(tick, pace * 1000);
+      if (current < Array.from(text).length) timeout = window.setTimeout(tick, pace * 1000);
     };
     timeout = window.setTimeout(tick, delay * 1000);
     return () => window.clearTimeout(timeout);
-  }, [text, delay, pace, reducedMotion]);
+  }, [text, delay, pace, reducedMotion, enabled]);
 
   const visibleCount = reducedMotion ? characters.length : count;
   const complete = visibleCount >= characters.length;
   return <span className={`typed-line ${className}`} aria-hidden="true" data-complete={complete}>
     <span className="typed-placeholder">{text}</span>
-    <span className="typed-output">{characters.slice(0, visibleCount).join('')}{started && !reducedMotion && <span className={`typing-cursor${complete ? ' is-finished' : ''}`} />}</span>
+    <span className="typed-output">{characters.slice(0, visibleCount).join('')}{started && !reducedMotion && <span className={`typing-cursor${complete ? ' is-finished' : ''}`} onAnimationEnd={event => { if (event.animationName === 'cursor-fade') onSettled?.(); }} />}</span>
   </span>;
 }
 
-function IntroductionTitle() {
+function IntroductionTitle({ onSettled }: { onSettled: () => void }) {
   const firstName = portfolio.name.split(' ')[0];
   return <div className="hero-title">
     <p className="eyebrow"><span className="sr-only">Data science, AI, Software</span><TypedLine text="Data science · AI · Software" delay={0.15} pace={0.025} /></p>
     <h1 aria-label={`Hi, I’m ${firstName}.`}>
       <TypedLine text="Hi, I’m" delay={0.9} pace={0.085} className="typed-greeting" />
-      <TypedLine text={`${firstName}.`} delay={1.65} pace={0.115} className="typed-name" />
+      <TypedLine text={`${firstName}.`} delay={1.65} pace={0.115} className="typed-name" onSettled={onSettled} />
     </h1>
   </div>;
 }
 
+function IntroductionSummary({ enabled }: { enabled: boolean }) {
+  const reducedMotion = useReducedMotion();
+  const [settled, setSettled] = useState(false);
+  const showProjects = reducedMotion || settled;
+  return <div className="hero-summary">
+    <p><span className="sr-only">{portfolio.introduction}</span><TypedLine text={portfolio.introduction} delay={0.12} pace={0.014} className="typed-paragraph" enabled={enabled} onSettled={() => setSettled(true)} /></p>
+    <motion.div className="hero-action" inert={!showProjects} aria-hidden={!showProjects} initial={reducedMotion ? false : { opacity: 0, y: 14 }} animate={showProjects ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.65, ease: revealEase }}>
+      <a className="round-link" href="#projects">See my projects <ArrowDown size={18} aria-hidden="true" /></a>
+    </motion.div>
+  </div>;
+}
+
 function Hero() {
+  const [titleSettled, setTitleSettled] = useState(false);
   const hero = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: hero, offset: ['start start', 'end start'] });
   return <section className="hero" id="top" ref={hero}>
@@ -129,11 +142,8 @@ function Hero() {
     </nav>
     <div className="hero-content">
       <div className="hero-copy">
-        <IntroductionTitle />
-        <Reveal className="hero-summary" delay={0.2} distance={16}>
-          <p>{portfolio.introduction}</p>
-          <a className="round-link" href="#projects">See my projects <ArrowDown size={18} aria-hidden="true" /></a>
-        </Reveal>
+        <IntroductionTitle onSettled={() => setTitleSettled(true)} />
+        <IntroductionSummary enabled={titleSettled} />
       </div>
       <Portrait progress={scrollYProgress} />
     </div>
