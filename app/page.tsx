@@ -4,6 +4,7 @@ import { motion, MotionConfig, useMotionValue, useReducedMotion, useScroll, useS
 import { ArrowDown, ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { portfolio, type Project } from './portfolio';
+import { FeaturedProjects, featuredTitles, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, TennisAccent } from './motion';
 
 const revealEase = [0.22, 1, 0.36, 1] as const;
 const listItem = {
@@ -125,7 +126,7 @@ function IntroductionSummary({ enabled }: { enabled: boolean }) {
   return <div className="hero-summary">
     <p><span className="sr-only">{portfolio.introduction}</span><TypedLine text={portfolio.introduction} delay={0.12} pace={0.014} className="typed-paragraph" enabled={enabled} onSettled={() => setSettled(true)} /></p>
     <motion.div className="hero-action" inert={!showProjects} aria-hidden={!showProjects} initial={reducedMotion ? false : { opacity: 0, y: 14 }} animate={showProjects ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.65, ease: revealEase }}>
-      <a className="round-link" href="#projects">See my projects <ArrowDown size={18} aria-hidden="true" /></a>
+      <MagneticLink className="round-link" href="#projects">See my projects <ArrowDown size={18} aria-hidden="true" /></MagneticLink>
     </motion.div>
   </div>;
 }
@@ -160,8 +161,8 @@ function SectionLabel({ children }: { children: ReactNode }) {
 
 function About() {
   return <section className="section about-section" id="about"><SectionLabel>About me</SectionLabel>
-    <div className="about-grid"><Reveal><h2>A little<br /><span className="muted-word">about me.</span></h2></Reveal><Reveal className="about-copy" delay={0.12}><p className="large-copy">{portfolio.about}</p><p className="about-work">{portfolio.aboutWork}</p><a className="text-link" href="#background">Get to know me <ArrowDown size={17} aria-hidden="true" /></a></Reveal></div>
-    <div className="profile-details" id="background"><Reveal><h3>My background</h3><p>{portfolio.background}</p></Reveal><Reveal className="skills-section" delay={0.12}><h3>My skills</h3>{portfolio.skills.length ? <StaggerList className="skill-list">{portfolio.skills.map(skill => <motion.li variants={listItem} key={skill.name}><strong>{skill.name}</strong><span>{skill.description}</span></motion.li>)}</StaggerList> : <p>I’ll be sharing the tools, skills, and ways of thinking behind my work here.</p>}</Reveal></div>
+    <div className="about-grid"><Reveal className="about-heading"><h2>A little<br /><span className="muted-word">about me.</span></h2><OrbitAccent /></Reveal><Reveal className="about-copy" delay={0.12}><ScrollParagraph text={portfolio.about} /><p className="about-work">{portfolio.aboutWork}</p><MagneticLink className="text-link" href="#background">Get to know me <ArrowDown size={17} aria-hidden="true" /></MagneticLink></Reveal></div>
+    <div className="profile-details" id="background"><Reveal><h3>My background</h3><p>{portfolio.background}</p></Reveal><div className="skills-section"><h3>My skills</h3><ul className="skill-list">{portfolio.skills.map((skill, index) => <SkillItem key={skill.name} name={skill.name} description={skill.description} index={index} />)}</ul></div></div>
   </section>;
 }
 
@@ -171,10 +172,11 @@ function ProjectEntry({ project }: { project: Project }) {
 
 function Projects() {
   const [filter, setFilter] = useState<'All work' | Project['status']>('All work');
-  const visible = portfolio.projects.filter(project => filter === 'All work' || project.status === filter);
+  const showFeatured = filter === 'All work';
+  const visible = portfolio.projects.filter(project => showFeatured ? !featuredTitles.includes(project.title as typeof featuredTitles[number]) : project.status === filter);
   return <section className="section projects-section" id="projects"><SectionLabel>Projects</SectionLabel><div className="section-heading"><Reveal><h2>What I’ve<br /><span className="muted-word">been working on.</span></h2></Reveal><Reveal className="section-summary" delay={0.14}><p>Research from my studies, projects for clients,<br />and a few things I’m building for myself.</p></Reveal></div>
     <Reveal distance={24}><div className="project-filters" role="group" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</div></Reveal>
-    <div className="project-results" aria-live="polite">{visible.length ? visible.map(project => <ProjectEntry key={project.title} project={project} />) : <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
+    <div className="project-results" aria-live="polite">{showFeatured && <FeaturedProjects />}{visible.length ? visible.map(project => <ProjectEntry key={project.title} project={project} />) : <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
   </section>;
 }
 
@@ -182,7 +184,7 @@ function Interests() {
   return <section className="section interests-section" id="interests">
     <SectionLabel>Outside work</SectionLabel>
     <div className="interests-content">
-      <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2></Reveal>
+      <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2><TennisAccent /></Reveal>
       <div>
         <Reveal delay={0.1}><p className="interests-intro">I like being around people, and making time for friends matters to me. I want work to fit alongside the rest of my life.</p><p className="interests-intro">Tennis, strength training, and running are a big part of how I spend my free time.</p></Reveal>
         <StaggerList className="interests-list">{portfolio.interests.map(interest => <motion.li variants={listItem} key={interest}>{interest}</motion.li>)}</StaggerList>
@@ -192,9 +194,9 @@ function Interests() {
 }
 
 function Contact() {
-  return <footer className="section contact-section" id="contact"><SectionLabel>Contact</SectionLabel><Reveal><h2>Say hello.</h2></Reveal><Reveal className="contact-bottom" delay={0.1}><p>If you’d like to talk about a role, a project,<br />or something I’ve worked on, get in touch.</p><div className="contact-links">{portfolio.contact.length ? portfolio.contact.map(link => <a className="text-link" href={link.href} key={link.label}>{link.label}{link.href.startsWith('mailto:') ? <Mail size={18} aria-hidden="true" /> : link.href.startsWith('tel:') ? <Phone size={18} aria-hidden="true" /> : <ArrowUpRight size={18} aria-hidden="true" />}</a>) : <p className="contact-pending">Contact details coming soon.</p>}</div></Reveal><Reveal className="footer-line" distance={18}><span>© {new Date().getFullYear()} {portfolio.name || 'Personal portfolio'}</span><a href="#top">Back to top ↑</a></Reveal></footer>;
+  return <footer className="section contact-section" id="contact"><SectionLabel>Contact</SectionLabel><Reveal><h2>Say hello.</h2></Reveal><Reveal className="contact-bottom" delay={0.1}><p>If you’d like to talk about a role, a project,<br />or something I’ve worked on, get in touch.</p><div className="contact-links">{portfolio.contact.length ? portfolio.contact.map(link => <MagneticLink className="text-link" href={link.href} key={link.label}>{link.label}{link.href.startsWith('mailto:') ? <Mail size={18} aria-hidden="true" /> : link.href.startsWith('tel:') ? <Phone size={18} aria-hidden="true" /> : <ArrowUpRight size={18} aria-hidden="true" />}</MagneticLink>) : <p className="contact-pending">Contact details coming soon.</p>}</div></Reveal><Reveal className="footer-line" distance={18}><span>© {new Date().getFullYear()} {portfolio.name || 'Personal portfolio'}</span><a href="#top">Back to top ↑</a></Reveal></footer>;
 }
 
 export default function Home() {
-  return <MotionConfig reducedMotion="user"><a className="skip-link" href="#about">Skip introduction</a><main><Hero /><About /><Projects /><Interests /></main><Contact /></MotionConfig>;
+  return <MotionConfig reducedMotion="user"><a className="skip-link" href="#about">Skip introduction</a><main><Hero /><ProjectRibbon /><About /><Projects /><Interests /></main><Contact /></MotionConfig>;
 }
