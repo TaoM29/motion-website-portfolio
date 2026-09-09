@@ -11,7 +11,7 @@ const kanit = Kanit({
 export const metadata: Metadata = {
   title: 'Taofik Muhriz — Data Science & Software',
   description:
-    'Meet Taofik Muhriz: data scientist and software builder. Explore machine learning research, data platforms, ongoing projects, and life beyond the work.',
+    'Taofik Muhriz’s projects in data science, machine learning, and web development, with his background at NMBU and interests outside work.',
 };
 
 export default function RootLayout({

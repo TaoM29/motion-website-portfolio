@@ -24,10 +24,14 @@ Final corrective image prompt:
 
 ## Suit portrait update
 
-The current asset is `public/images/personal-avatar-suit.png`, edited with built-in imagegen. The hover movement now follows the pointer up to 132px horizontally and 94px vertically with spring easing and a gentle tilt. The stationary hover region extends 180px around the portrait and avoids movement feedback; reduced-motion preferences disable the effect.
+The current asset is `public/images/personal-avatar-suit.png`, edited with built-in imagegen. The hover movement now follows the pointer up to 112px horizontally, limited by available space and 94px vertically with spring easing and a gentle tilt. The stationary hover region extends 180px around the portrait and avoids movement feedback; reduced-motion preferences disable the effect.
 
 Image edit prompt: Change only the clothing to a tailored charcoal suit jacket, crisp white collared shirt buttoned to the neck, and neatly knotted deep burgundy tie. Cover the necklace. Preserve the original face, identity, expression, hair, 3D style, proportions, rounded bust framing, 1024×1536 canvas, lighting and dark background. No text, logos, accessories or new objects.
 
 ## Page motion
 
-The introduction keeps opaque text visible after its one-time typing entrance, with crimson cursors that fade after each line. Section labels use crimson text without numerical prefixes. Heading and portrait parallax, staggered skill and interest lists, section rules, project reveals, and the contact entrance follow native scrolling. Reduced-motion preferences disable typing, parallax, and pointer motion while keeping content visible.
+The introduction uses a two-column layout on larger screens and stacks without overlap on phones. A timer reveals actual text and retains it after typing, with crimson cursors that fade after each line. Section labels use crimson text without numerical prefixes. Subtle portrait parallax, staggered skill and interest lists, section rules, project reveals, and the contact entrance follow native scrolling. Reduced-motion preferences disable typing, parallax, and pointer motion while keeping content visible.
+
+## Browser regression checks
+
+The September 2026 introduction fix was checked in Chrome: the full greeting remains visible after typing, both cursors fade, the portrait follows the pointer and returns to centre, project filters return the expected entries, and desktop, tablet, and phone layouts have no horizontal overflow. Reduced-motion mode shows the complete greeting immediately. The earlier one-millisecond CSS step animation could finish with fractional progress just below 1 and retain zero opacity; the text no longer depends on that animation.
