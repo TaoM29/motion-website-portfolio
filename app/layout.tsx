@@ -9,9 +9,9 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: 'Jack -- 3D Creator',
+  title: 'Taofik Muhriz — Data Science & Software',
   description:
-    'A dark, motion-rich portfolio landing page for Jack, a 3D creator.',
+    'Meet Taofik Muhriz: data scientist and software builder. Explore machine learning research, data platforms, ongoing projects, and life beyond the work.',
 };
 
 export default function RootLayout({
