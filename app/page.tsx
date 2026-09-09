@@ -151,7 +151,7 @@ function SectionLabel({ children }: { children: ReactNode }) {
 
 function About() {
   return <section className="section about-section" id="about"><SectionLabel>About me</SectionLabel>
-    <div className="about-grid"><Reveal className="about-heading"><h2>A little<br /><span className="muted-word">about me.</span></h2><OrbitAccent /></Reveal><Reveal className="about-copy" delay={0.12}><ScrollParagraph text={portfolio.about} /><p className="about-work">{portfolio.aboutWork}</p><MagneticLink className="text-link" href="#background">Get to know me <ArrowDown size={17} aria-hidden="true" /></MagneticLink></Reveal></div>
+    <div className="about-grid"><Reveal className="about-heading"><h2>A little<br /><span className="muted-word">about me.</span></h2><OrbitAccent /></Reveal><div className="about-copy"><ScrollParagraph className="large-copy" text={portfolio.about} /><ScrollParagraph className="about-work" text={portfolio.aboutWork} /><MagneticLink className="text-link" href="#background">Get to know me <ArrowDown size={17} aria-hidden="true" /></MagneticLink></div></div>
     <div className="profile-details" id="background"><Reveal><h3>My background</h3><p>{portfolio.background}</p></Reveal><div className="skills-section"><h3>My skills</h3><ul className="skill-list">{portfolio.skills.map((skill, index) => <SkillItem key={skill.name} name={skill.name} description={skill.description} index={index} />)}</ul></div></div>
   </section>;
 }
@@ -165,7 +165,7 @@ function Projects() {
   const visible = portfolio.projects.filter(project => filter === 'All work' || project.status === filter);
   const illustrated = visible.filter(hasProjectImage);
   const withoutImages = visible.filter(project => !project.image);
-  return <section className="section projects-section" id="projects"><SectionLabel>Projects</SectionLabel><div className="section-heading"><Reveal><h2>What I’ve<br /><span className="muted-word">been working on.</span></h2></Reveal><Reveal className="section-summary" delay={0.14}><p>Research from my studies, projects for clients,<br />and a few things I’m building for myself.</p></Reveal></div>
+  return <section className="section projects-section" id="projects"><SectionLabel>Projects</SectionLabel><div className="section-heading"><Reveal><h2>What I’ve<br /><span className="muted-word">been working on.</span></h2></Reveal><ScrollParagraph className="section-summary" text="Research from my studies, projects for clients, and a few things I’m building for myself." /></div>
     <Reveal distance={24}><div className="project-filters" role="group" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</div></Reveal>
     <div className="project-results" aria-live="polite">{illustrated.length > 0 && <FeaturedProjects key={filter} projects={illustrated} />}{withoutImages.map(project => <ProjectEntry key={project.title} project={project} />)}{visible.length === 0 && <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
   </section>;
@@ -177,7 +177,7 @@ function Interests() {
     <div className="interests-content">
       <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2></Reveal>
       <div>
-        <Reveal delay={0.1}>{portfolio.outsideWork.map(paragraph => <p className="interests-intro" key={paragraph}>{paragraph}</p>)}</Reveal>
+        {portfolio.outsideWork.map(paragraph => <ScrollParagraph className="interests-intro" key={paragraph} text={paragraph} />)}
       </div>
     </div>
     <InterestObjects />
@@ -185,7 +185,7 @@ function Interests() {
 }
 
 function Contact() {
-  return <footer className="section contact-section" id="contact"><SectionLabel>Contact</SectionLabel><Reveal><h2>Say hello.</h2></Reveal><Reveal className="contact-bottom" delay={0.1}><p>I’m open to new roles, projects and collaborations.<br />If you’d like to work together or talk about something I’ve built, get in touch.</p><div className="contact-links">{portfolio.contact.length ? portfolio.contact.map(link => <MagneticLink className="text-link" href={link.href} key={link.label}>{link.label}{link.href.startsWith('mailto:') ? <Mail size={18} aria-hidden="true" /> : link.href.startsWith('tel:') ? <Phone size={18} aria-hidden="true" /> : <ArrowUpRight size={18} aria-hidden="true" />}</MagneticLink>) : <p className="contact-pending">Contact details coming soon.</p>}</div></Reveal><Reveal className="footer-line" distance={18}><span>© {new Date().getFullYear()} {portfolio.name || 'Personal portfolio'}</span><a href="#top">Back to top ↑</a></Reveal></footer>;
+  return <footer className="section contact-section" id="contact"><SectionLabel>Contact</SectionLabel><Reveal><h2>Say hello.</h2></Reveal><div className="contact-bottom"><ScrollParagraph text="I’m open to new roles, projects and collaborations. If you’d like to work together or talk about something I’ve built, get in touch." /><Reveal className="contact-links" delay={0.1}>{portfolio.contact.length ? portfolio.contact.map(link => <MagneticLink className="text-link" href={link.href} key={link.label}>{link.label}{link.href.startsWith('mailto:') ? <Mail size={18} aria-hidden="true" /> : link.href.startsWith('tel:') ? <Phone size={18} aria-hidden="true" /> : <ArrowUpRight size={18} aria-hidden="true" />}</MagneticLink>) : <p className="contact-pending">Contact details coming soon.</p>}</Reveal></div><Reveal className="footer-line" distance={18}><span>© {new Date().getFullYear()} {portfolio.name || 'Personal portfolio'}</span><a href="#top">Back to top ↑</a></Reveal></footer>;
 }
 
 export default function Home() {

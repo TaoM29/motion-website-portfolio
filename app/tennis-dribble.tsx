@@ -4,7 +4,6 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type RefObject } from 'react';
-import { useInView } from 'framer-motion';
 import type { TennisLayout, TennisScene } from './tennis-scene';
 
 export function TennisDribble({ slot, gallery, active }: {
@@ -16,8 +15,7 @@ export function TennisDribble({ slot, gallery, active }: {
   const canvasHost = useRef<HTMLDivElement>(null);
   const scene = useRef<TennisScene | null>(null);
   const activeRef = useRef(active);
-  const nearViewport = useInView(court, { margin: '300px', once: true });
-  const [ready, setReady] = useState(false);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'fallback'>('loading');
 
   useEffect(() => {
     activeRef.current = active;
@@ -48,22 +46,23 @@ export function TennisDribble({ slot, gallery, active }: {
     observer.observe(container);
     window.addEventListener('resize', measure);
     measure();
-    if (nearViewport) {
-      // Load the 3D renderer only as this section approaches the viewport.
-      import('./tennis-scene').then(({ createTennisScene }) => {
-        if (cancelled) return;
-        instance = createTennisScene(host, () => setReady(false));
-        scene.current = instance;
-        instance.resize(layout);
-        instance.setActive(activeRef.current);
-        setReady(true);
-      }).catch(() => {
-        // Keep a static illustration if the browser cannot create a WebGL context.
-        instance?.dispose();
-        scene.current = null;
-        if (!cancelled) setReady(false);
-      });
-    }
+    // Fetch and warm the separate renderer chunk immediately after the page
+    // mounts. Animation itself still pauses offscreen. Never show a different
+    // flat racket while the real model is preparing.
+    import('./tennis-scene').then(async ({ createTennisScene }) => {
+      if (cancelled) return;
+      instance = createTennisScene(host, () => { if (!cancelled) setStatus('fallback'); });
+      scene.current = instance;
+      instance.resize(layout);
+      await instance.prepare();
+      if (cancelled) return;
+      instance.setActive(activeRef.current);
+      setStatus(current => current === 'fallback' ? current : 'ready');
+    }).catch(() => {
+      instance?.dispose();
+      if (scene.current === instance) scene.current = null;
+      if (!cancelled) setStatus('fallback');
+    });
     return () => {
       cancelled = true;
       observer.disconnect();
@@ -71,13 +70,13 @@ export function TennisDribble({ slot, gallery, active }: {
       instance?.dispose();
       scene.current = null;
     };
-  }, [slot, gallery, nearViewport]);
+  }, [slot, gallery]);
 
-  return <div className="tennis-court" ref={court} aria-hidden="true" data-rendered={ready}>
-    <div className="tennis-fallback">
+  return <div className="tennis-court" ref={court} aria-hidden="true" data-status={status}>
+    {status === 'fallback' && <div className="tennis-fallback">
       <img className="tennis-fallback-racket" src="/images/interests/tennis-racket.png" alt="" width={1536} height={1024} loading="lazy" draggable={false} />
       <div className="tennis-fallback-ball"><img src="/images/tennis-accent.png" alt="" width={1254} height={1254} loading="lazy" draggable={false} /></div>
-    </div>
+    </div>}
     <div className="tennis-canvas" ref={canvasHost} />
   </div>;
 }

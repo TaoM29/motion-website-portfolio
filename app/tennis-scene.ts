@@ -3,7 +3,7 @@ import { createRacket, createTennisBall } from './tennis-model';
 import { createTennisState, stepTennis, TENNIS_STEP } from './tennis-physics';
 
 export type TennisLayout = { width: number; height: number; left: number; top: number; slotWidth: number };
-export type TennisScene = { resize: (layout: TennisLayout) => void; setActive: (active: boolean) => void; dispose: () => void };
+export type TennisScene = { prepare: () => Promise<void>; resize: (layout: TennisLayout) => void; setActive: (active: boolean) => void; dispose: () => void };
 
 export function createTennisScene(host: HTMLDivElement, onContextLost: () => void): TennisScene {
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
@@ -40,6 +40,7 @@ export function createTennisScene(host: HTMLDivElement, onContextLost: () => voi
   let active = false;
   let disposed = false;
   let lost = false;
+  let prepared = false;
   let frame = 0;
   let lastTime = 0;
   let accumulator = 0;
@@ -90,7 +91,7 @@ export function createTennisScene(host: HTMLDivElement, onContextLost: () => voi
 
     camera.left = 0; camera.right = width; camera.top = height; camera.bottom = 0;
     camera.updateProjectionMatrix();
-    renderer.render(scene, camera);
+    if (prepared) renderer.render(scene, camera);
   }
 
   function tick(now: number) {
@@ -111,7 +112,7 @@ export function createTennisScene(host: HTMLDivElement, onContextLost: () => voi
     active = value;
     cancelAnimationFrame(frame);
     lastTime = 0;
-    if (active && layout) frame = requestAnimationFrame(tick);
+    if (active && layout && prepared) frame = requestAnimationFrame(tick);
   }
 
   const contextLost = (event: Event) => {
@@ -124,6 +125,15 @@ export function createTennisScene(host: HTMLDivElement, onContextLost: () => voi
 
   return {
     setActive,
+    async prepare() {
+      // Compile materials before this section is reached, rather than stalling
+      // the first visible frame with shader compilation.
+      await renderer.compileAsync(scene, camera);
+      if (disposed || lost) return;
+      prepared = true;
+      render();
+      if (active && layout) frame = requestAnimationFrame(tick);
+    },
     resize(next) {
       if (disposed || next.width <= 0 || next.height <= 0) return;
       layout = next;

@@ -62,11 +62,11 @@ export function createRacket() {
       new THREE.Vector3(31, side * 27, 0),
       new THREE.Vector3(54, side * 20, 0),
       new THREE.Vector3(78, side * 6, 0),
-      new THREE.Vector3(101, side * 3, 0),
+      new THREE.Vector3(94, side * 0.8, 0),
+      new THREE.Vector3(101, 0, 0),
     ], 2.6, crimson));
   }
-  racket.add(tube([new THREE.Vector3(58, -17, 0), new THREE.Vector3(62, 0, 0), new THREE.Vector3(58, 17, 0)], 2.1, crimson));
-  racket.add(new THREE.Mesh(cylinderBetween(new THREE.Vector3(91, 0, 0), new THREE.Vector3(117, 0, 0), 3.9), crimson));
+  racket.add(new THREE.Mesh(cylinderBetween(new THREE.Vector3(98, 0, 0), new THREE.Vector3(117, 0, 0), 3.9), crimson));
 
   const grip = new THREE.Mesh(cylinderBetween(new THREE.Vector3(110, 0, 0), new THREE.Vector3(164, 0, 0), 5.7), white);
   grip.name = 'Wrapped grip';

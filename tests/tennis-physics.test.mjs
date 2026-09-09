@@ -58,6 +58,15 @@ test('the racket has a solid 3D frame, open centre, strings and volume in the gr
   assert.equal(ray.intersectObject(frame).length, 0, 'the hoop centre should be open');
   ray.set(new Vector3(48, 0, 30), new Vector3(0, 0, -1));
   assert.ok(ray.intersectObject(frame).length > 0, 'the frame should have an actual front surface');
+  // Check the actual open throat, including where the old brace crossed it.
+  for (const [x, y] of [[58, -12], [62, 0], [58, 12], [68, 0], [76, 0]]) {
+    ray.set(new Vector3(x, y, 30), new Vector3(0, 0, -1));
+    assert.equal(ray.intersectObject(racket, true).length, 0, 'no brace or third arm may cross the open throat');
+  }
+  for (const y of [-20, 20]) {
+    ray.set(new Vector3(54, y, 30), new Vector3(0, 0, -1));
+    assert.ok(ray.intersectObject(racket, true).length > 0, 'both continuous frame arms must remain');
+  }
   const grip = new Box3().setFromObject(racket.getObjectByName('Wrapped grip')).getSize(new Vector3());
   assert.ok(grip.y > 9 && grip.z > 9);
   assert.ok(racket.getObjectByName('Woven string bed').geometry.attributes.position.count > 100);

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
-import { useEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react';
 import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { type ProjectWithImage } from './portfolio';
 import { TennisDribble } from './tennis-dribble';
@@ -40,16 +40,46 @@ export function MagneticLink({ href, className, children }: { href: string; clas
 }
 
 function ScrollWord({ children, progress, start, end, enabled }: { children: string; progress: MotionValue<number>; start: number; end: number; enabled: boolean }) {
-  const color = useTransform(progress, [start, end], ['#858b97', '#e4e6ea']);
+  const color = useTransform(progress, [start, end], ['#9ba0ab', '#e4e6ea']);
   return <motion.span className="scroll-word" style={{ color: enabled ? color : '#e4e6ea' }}>{children}</motion.span>;
 }
 
-export function ScrollParagraph({ text }: { text: string }) {
+export function ScrollParagraph({ text, className = '' }: { text: string; className?: string }) {
   const paragraph = useRef<HTMLParagraphElement>(null);
-  const enabled = useMotionEnabled();
-  const { scrollYProgress } = useScroll({ target: paragraph, offset: ['start 0.9', 'end 0.6'] });
-  const words = text.split(' ');
-  return <p ref={paragraph} className="large-copy scroll-paragraph"><span className="sr-only">{text}</span><span aria-hidden="true">{words.map((word, index) => <span key={`${index}-${word}`}><ScrollWord enabled={enabled} progress={scrollYProgress} start={index / words.length * 0.85} end={(index + 1) / words.length * 0.85 + 0.15}>{word}</ScrollWord>{' '}</span>)}</span></p>;
+  const reduced = useReducedMotion();
+  const { scrollY } = useScroll();
+  const range = useMotionValue({ start: 0, end: 0 });
+  const progress = useTransform(() => {
+    const { start, end } = range.get();
+    const position = scrollY.get();
+    return end <= start ? 1 : Math.max(0, Math.min(1, (position - start) / (end - start)));
+  });
+
+  useLayoutEffect(() => {
+    const element = paragraph.current;
+    if (!element) return;
+    const measure = () => {
+      const bounds = element.getBoundingClientRect();
+      const top = bounds.top + window.scrollY;
+      const height = window.innerHeight;
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - height);
+      // All section introductions use the same reading window. Clamp it to
+      // the available page scroll so Contact can finish brightening too.
+      range.set({
+        start: Math.max(0, Math.min(maxScroll, top - height * 0.92)),
+        end: Math.max(0, Math.min(maxScroll, top + bounds.height - height * 0.64)),
+      });
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    observer.observe(document.body);
+    window.addEventListener('resize', measure);
+    measure();
+    return () => { observer.disconnect(); window.removeEventListener('resize', measure); };
+  }, [range, text]);
+
+  const words = text.split(/\s+/);
+  return <p ref={paragraph} className={`scroll-paragraph ${className}`}><span className="sr-only">{text}</span><span aria-hidden="true">{words.map((word, index) => <span key={`${index}-${word}`}><ScrollWord enabled={!reduced} progress={progress} start={index / words.length * 0.85} end={(index + 1) / words.length * 0.85 + 0.15}>{word}</ScrollWord>{' '}</span>)}</span></p>;
 }
 
 export function OrbitAccent() {
