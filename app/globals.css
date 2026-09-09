@@ -233,3 +233,7 @@ h3 { font-weight: 400; }
  .project-stack .stacked-project { position: relative; transform: none !important; }
  .skill-depth { transform: none !important; }
 }
+/* Keep every original preview reachable when navigating with a keyboard. */
+.ribbon-window:focus-within { overflow-x: auto; }
+.ribbon-track:focus-within { transform: none !important; }
+.ribbon-track:focus-within .ribbon-repeat { display: none; }
