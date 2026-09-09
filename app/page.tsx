@@ -26,11 +26,11 @@ function Portrait({ progress }: { progress: MotionValue<number> }) {
   const stage = useRef<HTMLDivElement>(null);
   const targetX = useMotionValue(0);
   const targetY = useMotionValue(0);
-  const x = useSpring(targetX, { stiffness: 62, damping: 12, mass: 0.85 });
-  const y = useSpring(targetY, { stiffness: 62, damping: 12, mass: 0.85 });
-  const rotateX = useTransform(y, [-94, 94], [10, -10]);
-  const rotateY = useTransform(x, [-132, 132], [-14, 14]);
-  const rotate = useTransform(x, [-132, 132], [-3, 3]);
+  const x = useSpring(targetX, { stiffness: 72, damping: 15, mass: 0.9 });
+  const y = useSpring(targetY, { stiffness: 72, damping: 15, mass: 0.9 });
+  const rotateX = useTransform(y, [-94, 94], [9, -9]);
+  const rotateY = useTransform(x, [-112, 112], [-12, 12]);
+  const rotate = useTransform(x, [-112, 112], [-5, 5]);
   const scrollY = useTransform(progress, [0, 1], [0, 45]);
   const scale = useTransform(progress, [0, 1], [1, 0.97]);
 
@@ -69,10 +69,9 @@ function Portrait({ progress }: { progress: MotionValue<number> }) {
   }, [reducedMotion, targetX, targetY]);
 
   return <div className="portrait-stage" ref={stage}>
-    <div className="portrait-halo" aria-hidden="true" />
     <motion.div className="portrait-scroll" style={reducedMotion ? {} : { y: scrollY, scale }}>
       <motion.div className="portrait-tilt" style={reducedMotion ? { x: 0, y: 0, rotate: 0, rotateX: 0, rotateY: 0 } : { x, y, rotate, rotateX, rotateY }}>
-        <div className="portrait-float"><img className="portrait" src="/images/personal-avatar-suit.png" width="1024" height="1536" alt="3D illustrated portrait of Taofik Muhriz wearing a charcoal suit, white shirt, and burgundy tie" fetchPriority="high" draggable={false} /></div>
+        <div className="portrait-float"><img className="portrait" src="/images/personal-avatar-head.png" width="1254" height="1254" alt="Floating 3D illustrated head of Taofik Muhriz" fetchPriority="high" draggable={false} /></div>
       </motion.div>
     </motion.div>
   </div>;
