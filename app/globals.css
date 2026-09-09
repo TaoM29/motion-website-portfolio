@@ -56,15 +56,17 @@ h2 { font-size: clamp(2.7rem, 5.3vw, 5.25rem); line-height: 1.04; font-weight: 5
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 9%; }
 .large-copy { font-size: clamp(1.3rem, 2vw, 1.8rem); font-weight: 300; line-height: 1.6; }
 .text-link { display: inline-flex; align-items: center; gap: 28px; font-size: 1rem; border-bottom: 1px solid #ffffff4a; padding: 12px 0; transition: color .2s; }
+.about-work { margin-top: 24px; color: var(--muted); font-size: 1.125rem; font-weight: 300; line-height: 1.7; }
 .about-copy .text-link { margin-top: 25px; }
-.profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 9%; margin-top: 90px; padding-top: 32px; border-top: 1px solid var(--line); scroll-margin-top: 40px; }
+.profile-details { margin-top: 90px; padding-top: 32px; border-top: 1px solid var(--line); scroll-margin-top: 40px; }
 h3 { font-weight: 400; }
 .profile-details h3 { font-size: 1.25rem; margin-bottom: 16px; }
-.profile-details p { max-width: 490px; color: var(--muted); font-size: 1rem; font-weight: 300; line-height: 1.7; }
-.skill-list { list-style: none; padding: 0; margin: 0; }
-.skill-list li { display: grid; gap: 5px; margin-bottom: 15px; }
-.skill-list strong { font-weight: 400; }
-.skill-list span { color: var(--muted); }
+.profile-details p { max-width: 760px; color: var(--muted); font-size: 1rem; font-weight: 300; line-height: 1.7; }
+.skills-section { margin-top: 44px; }
+.skill-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 9%; row-gap: 26px; list-style: none; padding: 0; margin: 0; }
+.skill-list li { display: grid; gap: 8px; align-content: start; padding-top: 18px; border-top: 1px solid var(--line); }
+.skill-list strong { font-weight: 400; font-size: 1.1rem; }
+.skill-list span { color: var(--muted); font-weight: 300; line-height: 1.7; }
 .section-heading { display: grid; grid-template-columns: 1.25fr 1fr; align-items: end; gap: 6%; }
 .section-summary { color: var(--muted); font-size: 1rem; font-weight: 300; line-height: 1.6; }
 .project-filters { display: flex; gap: 10px; margin: 48px 0 32px; flex-wrap: wrap; }
@@ -123,6 +125,7 @@ h3 { font-weight: 400; }
  .section-label { margin-bottom: 42px; }
  .about-grid, .profile-details, .interests-content, .contact-bottom { grid-template-columns: 1fr; gap: 32px; }
  .profile-details { margin-top: 45px; }
+ .skill-list { grid-template-columns: 1fr; }
  .contact-section { padding-bottom: 25px; }
  .footer-line { margin-top: 55px; }
 }

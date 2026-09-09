@@ -160,8 +160,8 @@ function SectionLabel({ children }: { children: ReactNode }) {
 
 function About() {
   return <section className="section about-section" id="about"><SectionLabel>About me</SectionLabel>
-    <div className="about-grid"><Reveal><h2>A little<br /><span className="muted-word">about me.</span></h2></Reveal><Reveal className="about-copy" delay={0.12}><p className="large-copy">{portfolio.about}</p><a className="text-link" href="#background">Get to know me <ArrowDown size={17} aria-hidden="true" /></a></Reveal></div>
-    <div className="profile-details" id="background"><Reveal><h3>My background</h3><p>{portfolio.background}</p></Reveal><Reveal delay={0.12}><h3>My skills</h3>{portfolio.skills.length ? <StaggerList className="skill-list">{portfolio.skills.map(skill => <motion.li variants={listItem} key={skill.name}><strong>{skill.name}</strong><span>{skill.description}</span></motion.li>)}</StaggerList> : <p>I’ll be sharing the tools, skills, and ways of thinking behind my work here.</p>}</Reveal></div>
+    <div className="about-grid"><Reveal><h2>A little<br /><span className="muted-word">about me.</span></h2></Reveal><Reveal className="about-copy" delay={0.12}><p className="large-copy">{portfolio.about}</p><p className="about-work">{portfolio.aboutWork}</p><a className="text-link" href="#background">Get to know me <ArrowDown size={17} aria-hidden="true" /></a></Reveal></div>
+    <div className="profile-details" id="background"><Reveal><h3>My background</h3><p>{portfolio.background}</p></Reveal><Reveal className="skills-section" delay={0.12}><h3>My skills</h3>{portfolio.skills.length ? <StaggerList className="skill-list">{portfolio.skills.map(skill => <motion.li variants={listItem} key={skill.name}><strong>{skill.name}</strong><span>{skill.description}</span></motion.li>)}</StaggerList> : <p>I’ll be sharing the tools, skills, and ways of thinking behind my work here.</p>}</Reveal></div>
   </section>;
 }
 
