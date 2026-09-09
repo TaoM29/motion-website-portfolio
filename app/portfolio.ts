@@ -39,7 +39,13 @@ export const portfolio = {
     { name: 'Academic foundations', description: 'A foundation in statistics, signal processing, algorithms and deep learning from my Data Science studies. I also have basic familiarity with dbt and cloud platforms.' },
     { name: 'Communication & collaboration', description: 'Explaining technical work, coordinating tasks and working with clients and colleagues. I value clear communication and shared priorities, and speak Norwegian, English and Arabic.' },
   ],
-  interests: ['Tennis', 'Strength training', 'Running', 'Time with friends'],
+  outsideWork: [
+    'A good day for me means waking up with time for the things I enjoy and the people I care about. My friends would describe me as quick to learn, adaptable, and someone they can come to for advice.',
+    'Tennis, strength training and running give me a way to compete, push myself and clear my head. I like the mentality of getting stronger and not giving up. Taking care of my body and mind also helps me feel sharper at work.',
+    'Music is another big part of my life, especially house music. I DJ myself, so it’s something I enjoy both listening to and playing.',
+    'Looking ahead, I want to keep doing what I enjoy, stay healthy and active, and hopefully travel around the world one day.',
+  ],
+  interests: ['Tennis', 'Strength training', 'Running', 'House music & DJing', 'Time with friends'],
   contact: [
     { label: 'tawfik.muhriz@gmail.com', href: 'mailto:tawfik.muhriz@gmail.com' },
     { label: 'GitHub', href: 'https://github.com/TaoM29' },

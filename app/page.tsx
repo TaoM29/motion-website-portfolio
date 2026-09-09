@@ -187,7 +187,7 @@ function Interests() {
     <div className="interests-content">
       <Reveal><h2>Away from<br /><span className="muted-word">my desk.</span></h2><TennisAccent /></Reveal>
       <div>
-        <Reveal delay={0.1}><p className="interests-intro">I like being around people, and making time for friends matters to me. I want work to fit alongside the rest of my life.</p><p className="interests-intro">Tennis, strength training, and running are a big part of how I spend my free time.</p></Reveal>
+        <Reveal delay={0.1}>{portfolio.outsideWork.map(paragraph => <p className="interests-intro" key={paragraph}>{paragraph}</p>)}</Reveal>
         <StaggerList className="interests-list">{portfolio.interests.map(interest => <motion.li variants={listItem} key={interest}>{interest}</motion.li>)}</StaggerList>
       </div>
     </div>
