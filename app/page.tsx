@@ -167,7 +167,7 @@ function About() {
 }
 
 function ProjectEntry({ project }: { project: Project }) {
-  return <Reveal><article className="project-entry"><div className="project-body"><div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div><h3>{project.title}</h3><p>{project.description}</p><ul className="project-tags" aria-label="Project topics">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div>{project.url && <a className="project-link" href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${project.title} (new tab)`}><ArrowUpRight aria-hidden="true" /></a>}</article></Reveal>;
+  return <Reveal><article className={`project-entry${project.image ? ' has-preview' : ''}`}>{project.image && <figure className="project-preview"><img src={project.image.src} alt={project.image.alt} loading="lazy" />{project.image.caption && <figcaption>{project.image.caption}</figcaption>}</figure>}<div className="project-body"><div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div><h3>{project.title}</h3><p>{project.description}</p><ul className="project-tags" aria-label="Project topics">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div>{project.url && <a className="project-link" href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${project.title} (new tab)`}><ArrowUpRight aria-hidden="true" /></a>}</article></Reveal>;
 }
 
 function Projects() {

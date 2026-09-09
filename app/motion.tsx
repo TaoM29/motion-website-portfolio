@@ -81,8 +81,9 @@ export function SkillItem({ name, description, index }: { name: string; descript
 }
 
 const visuals = [
+  { image: '/images/projects/energy-weather-dashboard.png', title: 'Energy & Weather', detail: 'Interactive dashboard', fit: 'cover' },
   { image: '/images/projects/altawfiq-en.png', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
-  { image: '/images/projects/thesis-pipeline.png', title: 'Lung CT research', detail: 'My modelling pipeline', fit: 'contain' },
+  { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
   { image: '/images/projects/morris-marine.png', title: 'Morris Marine', detail: 'Website in development', fit: 'cover' },
   { image: '/images/projects/altawfiq-ar.png', title: 'AL-TAWFIQ', detail: 'Arabic website', fit: 'cover' },
 ] as const;
@@ -106,7 +107,7 @@ export function ProjectRibbon() {
 }
 
 const featureDefinitions = [
-  { title: 'Predicting mucus plugs from lung CT scans', image: '/images/projects/thesis-pipeline.png', alt: 'Research diagram showing my pipeline from CT preprocessing through model fusion to patient-level prediction', caption: 'The pipeline behind my master’s thesis', fit: 'contain' },
+  { title: 'Predicting mucus plugs from lung CT scans', image: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging, with layered scans and subtle crimson highlights', caption: 'AI-generated illustration · Lung CT research', fit: 'artwork' },
   { title: 'AL-TAWFIQ Trading Group', image: '/images/projects/altawfiq-en.png', alt: 'English homepage of the AL-TAWFIQ website I developed', caption: 'English and Arabic web development', fit: 'cover' },
   { title: 'Morris Marine', image: '/images/projects/morris-marine.png', alt: 'Current homepage of the Morris Marine website I am developing', caption: 'A client website in development', fit: 'cover' },
 ] as const;

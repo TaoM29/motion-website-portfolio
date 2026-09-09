@@ -4,6 +4,7 @@ export type Project = {
   description: string;
   status: 'Completed' | 'In progress';
   url?: string;
+  image?: { src: string; alt: string; caption?: string };
   tags: string[];
 };
 
@@ -17,18 +18,18 @@ export const portfolio = {
   aboutWork: 'My projects range from analysing lung CT scans to building websites for clients. I like getting into the technical details and talking with the people I’m building for. Those conversations help me work out what matters, make better choices, and improve the result as I go.',
   background: 'I completed a five-year MSc in Data Science at NMBU (2021–2026), specialising in Business Analytics. My master’s thesis explored predictions from lung CT scans and received an A. Alongside my studies, work in healthcare and hospitality taught me to collaborate, communicate clearly, and stay calm when things get busy.',
   skills: [
-    { name: 'Data analysis & statistics', description: 'Python, pandas, NumPy and R for exploring data, regression and statistical modelling. I work with assumptions, uncertainty and data quality when interpreting results.' },
-    { name: 'Machine learning & computer vision', description: 'PyTorch, scikit-learn and OpenCV. My work includes CNNs, feature engineering, transfer learning, data augmentation and medical image analysis.' },
-    { name: 'Model evaluation & research', description: 'Cross-validation, patient-level data splits, error analysis and checks for data leakage and generalisation. I document methods, results and limitations, including scientific writing in LaTeX.' },
-    { name: 'Time series, dashboards & reporting', description: 'Trend and seasonal analysis, forecasting, KPI definitions and interactive Streamlit dashboards. I focus on making findings understandable and useful for decisions; I also have basic Power BI knowledge.' },
-    { name: 'Data engineering & integrations', description: 'Python and SQL pipelines, ETL, API integration and validated CSV/JSON imports. I’ve worked with Strava OAuth, token renewal, data synchronisation and checks at the point of import.' },
-    { name: 'Databases & data modelling', description: 'PostgreSQL and Supabase, relational models, migrations and data validation. My project work includes authentication, row-level security and keeping each user’s data separate.' },
-    { name: 'Web development', description: 'TypeScript, React, Next.js and Tailwind CSS. I build responsive interfaces, reusable components and accessible navigation, including English and Arabic layouts with both reading directions.' },
-    { name: 'LLMs & AI-assisted development', description: 'Information extraction, prompting and output checks for automated KPI reports. I also use AI agents in development, with scoped tasks, relevant project context and separate reviews of the results.' },
-    { name: 'Testing & delivery', description: 'Git/GitHub, Docker-based project environments, automated tests and type checking. I’ve delivered websites with Vercel and worked with Cloudflare, DNS, custom domains and technical SEO.' },
-    { name: 'Business analysis & product development', description: 'Understanding requirements, mapping processes and assessing technical choices against costs, risks and business needs. I enjoy taking responsibility from the first conversation through implementation and feedback.' },
-    { name: 'Academic foundations', description: 'Hypothesis testing, statistical inference, Fourier and spectral analysis, digital filtering and frequency-based image analysis. My studies also covered SciPy, TensorFlow and Keras; I have basic familiarity with dbt and cloud platforms.' },
-    { name: 'Communication & collaboration', description: 'Explaining technical work, coordinating tasks, prioritising and documenting decisions. Client work and roles in healthcare and hospitality have shaped how I work with people. I speak Norwegian, English and Arabic.' },
+    { name: 'Data analysis & statistics', description: 'Python, pandas, NumPy and R for exploring data, regression and statistical modelling. I turn findings into clear insights, with attention to data quality and uncertainty.' },
+    { name: 'Machine learning & computer vision', description: 'PyTorch, scikit-learn and OpenCV for predictive modelling, deep learning and image analysis. My work includes feature engineering, model training and optimisation.' },
+    { name: 'Model evaluation & research', description: 'Cross-validation, model comparison and error analysis. I assess reliability and generalisation, and communicate methods, findings and limitations clearly.' },
+    { name: 'Time series, dashboards & reporting', description: 'Time series analysis, forecasting and interactive Streamlit dashboards. I work with trends, seasonal patterns and KPI reporting, and have basic Power BI knowledge.' },
+    { name: 'Data engineering & integrations', description: 'Python and SQL for data pipelines, ETL and API integrations. I connect information from different sources and prepare reliable data for analysis and reporting.' },
+    { name: 'Databases & data modelling', description: 'PostgreSQL and Supabase for database design, data modelling and access control. I focus on organising data so it is consistent, secure and easy to work with.' },
+    { name: 'Web development', description: 'TypeScript, React, Next.js and Tailwind CSS for responsive websites and applications. I work with reusable components, accessibility and multilingual design.' },
+    { name: 'LLMs & AI-assisted development', description: 'LLM-based information extraction, report automation and quality checks. I also use AI-assisted development to plan, build and review software.' },
+    { name: 'Testing & delivery', description: 'Git, GitHub, Docker and automated testing. My experience includes version control, quality assurance, and website deployment and configuration with Vercel and Cloudflare.' },
+    { name: 'Business analysis & product development', description: 'Requirements analysis, process improvement and translating business needs into technical solutions. I enjoy working from the first question through development, delivery and feedback.' },
+    { name: 'Academic foundations', description: 'A foundation in statistics, signal processing, algorithms and deep learning from my Data Science studies. I also have basic familiarity with dbt and cloud platforms.' },
+    { name: 'Communication & collaboration', description: 'Explaining technical work, coordinating tasks and working with clients and colleagues. I value clear communication and shared priorities, and speak Norwegian, English and Arabic.' },
   ],
   interests: ['Tennis', 'Strength training', 'Running', 'Time with friends'],
   contact: [
@@ -39,6 +40,7 @@ export const portfolio = {
   projects: [
     {
       title: 'Predicting mucus plugs from lung CT scans',
+      image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', caption: 'AI-generated illustration' },
       category: 'Master’s thesis',
       description: 'For my master’s thesis, I built a pipeline from raw lung CT images to estimates of mucus plug burden. I compared CNN models using fivefold cross-validation, evaluated predictions at patient level, and examined data leakage, uncertainty and generalisation. The thesis received an A.',
       status: 'Completed',
@@ -60,6 +62,7 @@ export const portfolio = {
     },
     {
       title: 'Energy & weather insights',
+      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Home page of my Energy & Weather Dashboard, with tools for exploring weather, energy production, consumption and forecasting' },
       category: 'Data analysis',
       description: 'I brought energy and weather data together in a Streamlit app, from collecting and checking the data to presenting the results. I explored seasonal patterns, forecasts, and the relationship between weather and energy use.',
       status: 'Completed',
