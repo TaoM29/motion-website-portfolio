@@ -116,7 +116,7 @@ const visuals = [
   { image: '/images/projects/personal-performance-overview.png', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
   { image: '/images/projects/altawfiq-en.png', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
   { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
-  { image: '/images/projects/morris-marine.png', title: 'Morris Marine', detail: 'Website in development', fit: 'cover' },
+  { image: '/images/projects/morrise-marine-service.png', title: 'Morrise Marine Service', detail: 'Website in development', fit: 'cover' },
   { image: '/images/projects/altawfiq-ar.png', title: 'AL-TAWFIQ', detail: 'Arabic website', fit: 'cover' },
 ] as const;
 
@@ -145,7 +145,7 @@ function StackedProject({ project, index, count, top, progress, enabled }: { pro
   const scale = useTransform(progress, [foldStart, 1], [1, 1 - depth * 0.1]);
   const rotateX = useTransform(progress, [foldStart, 1], [0, -depth * 4]);
   const imageY = useTransform(progress, [0, 1], [10, -10]);
-  return <motion.article className="stacked-project" style={enabled ? { top, scale, rotateX, transformPerspective: 1500, zIndex: index + 1 } : { top: 0, scale: 1, rotateX: 0, zIndex: index + 1 }}>
+  return <motion.article className={`stacked-project${project.status === 'In progress' ? ' stacked-project-in-progress' : ''}`} style={enabled ? { top, scale, rotateX, transformPerspective: 1500, zIndex: index + 1 } : { top: 0, scale: 1, rotateX: 0, zIndex: index + 1 }}>
     <div className="stacked-copy">
       <div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div>
       <h3>{project.title}</h3><p>{project.description}</p>

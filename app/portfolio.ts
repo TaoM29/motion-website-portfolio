@@ -83,8 +83,8 @@ export const portfolio = {
       tags: ['Streamlit', 'Time series', 'Forecasting', 'Visualisation'],
     },
     {
-      title: 'Morris Marine',
-      image: { src: '/images/projects/morris-marine.png', alt: 'Current homepage of the Morris Marine website I am developing', width: 1440, height: 960, caption: 'A client website in development' },
+      title: 'Morrise Marine Service',
+      image: { src: '/images/projects/morrise-marine-service.png', alt: 'Morrise Marine Service homepage showing a cargo ship and maritime services', width: 1920, height: 1112, caption: 'A client website in development' },
       category: 'Client work',
       description: 'I’m making a website for a maritime business, organising its company information and services into clear pages. The layout and navigation are implemented, and I’m still working on the site before launch.',
       status: 'In progress',
