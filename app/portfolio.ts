@@ -105,7 +105,7 @@ export const portfolio = {
       summary: [{"label": "Purpose", "text": "Organise a maritime company’s information and services into clear pages."}, {"label": "Implemented", "text": "Page layout and navigation."}, {"label": "Status", "text": "Preparing the website for launch."}],
       details: [{"label": "Client website", "text": "I’m building the site for a maritime business, organising company information and services into clear pages."}, {"label": "Current progress", "text": "The layout and navigation are implemented. The website is still in development before launch."}],
       detailLabel: "View project details",
-      image: { src: '/images/projects/morrise-marine-service.png', alt: 'Morrise Marine Service homepage showing a cargo ship and maritime services', width: 1920, height: 1112, caption: 'A client website in development' },
+      image: { src: '/images/projects/morrise-marine-service.png', alt: 'Morrise Marine Service homepage showing a cargo ship and maritime services', width: 2880, height: 1616, caption: 'A client website in development' },
       category: 'Client work',
       description: 'I’m making a website for a maritime business, organising its company information and services into clear pages. The layout and navigation are implemented, and I’m still working on the site before launch.',
       status: 'In progress',
