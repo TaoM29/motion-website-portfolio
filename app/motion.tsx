@@ -4,6 +4,7 @@ import { motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpri
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react';
 import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { type ProjectWithImage } from './portfolio';
+import { ProjectSummary, ProjectSkills, ProjectActions, ProjectImage } from './project-content';
 import { TennisDribble } from './tennis-dribble';
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -139,28 +140,26 @@ export function ProjectRibbon() {
 }
 
 function StackedProject({ project, index, count, top, progress, enabled }: { project: ProjectWithImage; index: number; count: number; top: number; progress: MotionValue<number>; enabled: boolean }) {
-  const visual = project.image;
   const depth = (count - 1 - index) / Math.max(count - 1, 1);
   const foldStart = index / count * 0.85;
   const scale = useTransform(progress, [foldStart, 1], [1, 1 - depth * 0.1]);
   const rotateX = useTransform(progress, [foldStart, 1], [0, -depth * 4]);
-  const imageY = useTransform(progress, [0, 1], [10, -10]);
   return <motion.article className={`stacked-project${project.status === 'In progress' ? ' stacked-project-in-progress' : ''}`} style={enabled ? { top, scale, rotateX, transformPerspective: 1500, zIndex: index + 1 } : { top: 0, scale: 1, rotateX: 0, zIndex: index + 1 }}>
     <div className="stacked-copy">
       <div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div>
-      <h3>{project.title}</h3><p>{project.description}</p>
-      <ul className="project-tags" aria-label="Project topics">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
+      <h3>{project.title}</h3><ProjectSummary project={project} />
+      <ProjectSkills project={project} /><ProjectActions project={project} />
     </div>
-    <figure className={`stacked-visual ${visual.fit ?? 'cover'}`}><div className="stacked-image"><motion.img src={visual.src} alt={visual.alt} width={visual.width} height={visual.height} loading="lazy" style={enabled && visual.fit !== 'artwork' ? { y: imageY } : { y: 0 }} /></div>{visual.caption && <figcaption>{visual.caption}</figcaption>}</figure>
+    <ProjectImage project={project} />
   </motion.article>;
 }
 
-export function FeaturedProjects({ projects }: { projects: ProjectWithImage[] }) {
+export function FeaturedProjects({ projects, mode = 'Stack' }: { projects: ProjectWithImage[]; mode?: 'Stack' | 'List' }) {
   const stack = useRef<HTMLDivElement>(null);
   const motionEnabled = useMotionEnabled('(min-width: 1001px) and (min-height: 800px)');
   const [cardsFit, setCardsFit] = useState(false);
   const stackStep = Math.min(26, 78 / Math.max(projects.length - 1, 1));
-  const enabled = motionEnabled && cardsFit;
+  const enabled = mode === 'Stack' && motionEnabled && cardsFit;
   const { scrollYProgress } = useScroll({ target: stack, offset: ['start start', 'end end'] });
 
   useEffect(() => {

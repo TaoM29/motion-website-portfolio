@@ -5,6 +5,11 @@ export type Project = {
   status: 'Completed' | 'In progress';
   url?: string;
   image?: { src: string; alt: string; width: number; height: number; caption?: string; fit?: 'cover' | 'artwork' };
+  summary?: { label: string; text: string }[];
+  details?: { label: string; text: string }[];
+  detailLabel?: string;
+  tagsLabel?: string;
+  alternateImage?: { src: string; alt: string; label: string };
   tags: string[];
 };
 
@@ -19,7 +24,7 @@ export function hasProjectImage(project: Project): project is ProjectWithImage {
 // Reviewed the ten most recently modified CV PDFs on 2026-09-09; project notes clarify older CV claims.
 export const portfolio = {
   name: 'Taofik Muhriz',
-  introduction: 'I’m a data scientist with an MSc from NMBU. I work on machine learning, data tools, and websites and enjoy working with the people who use them.',
+  introduction: 'I’m a data scientist with an MSc from NMBU. I build machine-learning models, data tools and websites, from exploring the problem to delivering the product.',
   about: 'I’m 24, based in Fredrikstad, and I enjoy turning data into insight that people can use. I’m happiest working on a product from end to end: understanding the question, exploring the data, building the solution, and following it through to a finished product.',
   aboutWork: 'My projects range from analysing lung CT scans to building websites for clients. I like getting into the technical details and talking with the people I’m building for. Those conversations help me work out what matters, make better choices, and improve the result as I go.',
   background: 'I completed a five-year MSc in Data Science at NMBU (2021–2026), specialising in Business Analytics. My master’s thesis explored predictions from lung CT scans and received an A. Alongside my studies, work in healthcare and hospitality taught me to collaborate, communicate clearly, and stay calm when things get busy.',
@@ -52,6 +57,9 @@ export const portfolio = {
   projects: [
     {
       title: 'Predicting mucus plugs from lung CT scans',
+      summary: [{"label": "Problem", "text": "Explore whether lung CT scans can be used to estimate mucus plug burden."}, {"label": "My contribution", "text": "Built the image-processing and modelling pipeline, compared CNNs using fivefold cross-validation, and evaluated predictions at patient level."}, {"label": "Outcome", "text": "Completed the thesis with an A, examining data leakage, uncertainty and generalisation."}],
+      details: [{"label": "From images to estimates", "text": "My work covered the pipeline from raw lung CT images to estimates of mucus plug burden, including model training and comparison."}, {"label": "Evaluation", "text": "I used fivefold cross-validation and evaluated predictions at patient level. The research examined data leakage, uncertainty and generalisation."}, {"label": "Research outcome", "text": "The completed thesis received an A. The card image is an AI-generated illustration, not a patient scan or a model result."}],
+      detailLabel: "Read research details",
       image: { src: '/images/projects/lung-ct-illustration.png', alt: 'AI-generated illustration inspired by lung CT imaging', width: 1536, height: 1024, caption: 'AI-generated illustration of Lung CT images', fit: 'artwork' },
       category: 'Master’s thesis',
       description: 'For my master’s thesis, I built a pipeline from raw lung CT images to estimates of mucus plug burden. I compared CNN models using fivefold cross-validation, evaluated predictions at patient level, and examined data leakage, uncertainty and generalisation. The thesis received an A.',
@@ -60,7 +68,10 @@ export const portfolio = {
     },
     {
       title: 'Personal Performance Intelligence',
-      image: { src: '/images/projects/personal-performance-overview.png', alt: 'Personal Performance Intelligence overview design showing training, tennis, nutrition and activity summaries', width: 2880, height: 1800, caption: 'Overview design of a personal performance intelligence in development' },
+      summary: [{"label": "Purpose", "text": "Bring my training, nutrition and tennis records together for analysis."}, {"label": "Implemented", "text": "Strava activity sync, Lifesum imports, tennis records, authenticated access and reports traceable to their source."}, {"label": "In progress", "text": "Developing the analysis and handling missing data."}],
+      details: [{"label": "Data imports", "text": "Strava activity sync, Lifesum file imports and tennis records bring different sources into the platform."}, {"label": "Access and reporting", "text": "Authenticated access protects the records. Descriptive reports can be traced back to their source data."}, {"label": "Continuing development", "text": "I’m developing the analysis with attention to missing data and what the available records can support. The screenshot shows the overview design."}],
+      detailLabel: "View project details",
+      image: { src: '/images/projects/personal-performance-overview.png', alt: 'Personal Performance Intelligence overview design showing training, tennis, nutrition and activity summaries', width: 2880, height: 1800, caption: 'Overview design — training, nutrition and tennis in one place.' },
       category: 'Personal project',
       description: 'I’m building a platform around my own interests in training, nutrition and tennis. It brings together Strava activity sync, Lifesum file imports and tennis records, with authenticated access and descriptive reports that can be traced back to their source. I’m continuing to develop the analysis, with particular attention to missing data and what the results can support.',
       status: 'In progress',
@@ -68,14 +79,21 @@ export const portfolio = {
     },
     {
       title: 'AL-TAWFIQ Trading Group',
+      summary: [{"label": "Purpose", "text": "Present the company’s information in English and Arabic."}, {"label": "My contribution", "text": "Built the website with layouts that work in both reading directions."}, {"label": "Delivered", "text": "The public website is live."}],
+      details: [{"label": "Bilingual development", "text": "I built English and Arabic versions of the website, with left-to-right and right-to-left layouts."}, {"label": "Interface", "text": "Responsive layouts and navigation support the company’s content across screen sizes. Use the language buttons to compare the homepage designs."}],
+      detailLabel: "View project details",
+      alternateImage: {"src": "/images/projects/altawfiq-ar.png", "alt": "Arabic homepage of the AL-TAWFIQ website", "label": "Arabic"},
       image: { src: '/images/projects/altawfiq-en.png', alt: 'English homepage of the AL-TAWFIQ website I developed', width: 1440, height: 960, caption: 'English and Arabic web development' },
       category: 'Client work',
-      description: 'I built the company’s website in English and Arabic, including layouts that work in both reading directions. The public site is live. I’m continuing to work on customer data and subscriptions as part of the same project.',
+      description: 'I built the company’s website in English and Arabic, including layouts that work in both reading directions. The public site is live.',
       status: 'In progress',
       tags: ['Next.js', 'TypeScript', 'Arabic / English', 'Client collaboration', 'Responsive design', 'RTL layouts'],
     },
     {
       title: 'Energy & weather insights',
+      summary: [{"label": "Purpose", "text": "Explore seasonal patterns and the relationship between weather and energy use."}, {"label": "My contribution", "text": "Collected and checked the data, explored forecasts, and presented the analysis in Streamlit."}],
+      details: [{"label": "Data preparation", "text": "I brought energy and weather data together, collecting and checking the data before analysis."}, {"label": "Exploration", "text": "The work explored seasonal patterns, forecasts and the relationship between weather and energy use."}, {"label": "Delivery", "text": "I presented the work in a Streamlit application. The screenshot shows its home page and exploration tools."}],
+      detailLabel: "View analysis details",
       image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Home page of my Energy & Weather Dashboard, with tools for exploring weather, energy production, consumption and forecasting', width: 2880, height: 1624, caption: 'Energy and weather exploration in Streamlit' },
       category: 'Data analysis',
       description: 'I brought energy and weather data together in a Streamlit app, from collecting and checking the data to presenting the results. I explored seasonal patterns, forecasts, and the relationship between weather and energy use.',
@@ -84,6 +102,9 @@ export const portfolio = {
     },
     {
       title: 'Morrise Marine Service',
+      summary: [{"label": "Purpose", "text": "Organise a maritime company’s information and services into clear pages."}, {"label": "Implemented", "text": "Page layout and navigation."}, {"label": "Status", "text": "Preparing the website for launch."}],
+      details: [{"label": "Client website", "text": "I’m building the site for a maritime business, organising company information and services into clear pages."}, {"label": "Current progress", "text": "The layout and navigation are implemented. The website is still in development before launch."}],
+      detailLabel: "View project details",
       image: { src: '/images/projects/morrise-marine-service.png', alt: 'Morrise Marine Service homepage showing a cargo ship and maritime services', width: 1920, height: 1112, caption: 'A client website in development' },
       category: 'Client work',
       description: 'I’m making a website for a maritime business, organising its company information and services into clear pages. The layout and navigation are implemented, and I’m still working on the site before launch.',
@@ -92,13 +113,20 @@ export const portfolio = {
     },
     {
       title: 'ISP customer & operations platform',
+      summary: [{"label": "Current stage", "text": "System architecture and infrastructure integration planning."}],
+      details: [{"label": "Customer portal", "text": "Planned: secure login, package changes, usage tracking, payments and invoices, and renewal, payment and usage notifications."}, {"label": "Administration", "text": "Planned: customer, subscription, package and payment management, service status, role-based access and reporting."}, {"label": "Network integration", "text": "Planned: provisioning, bandwidth limits, quotas, subscription expiry and service restrictions through PPPoE, RADIUS or router APIs."}],
+      detailLabel: "View planned functionality",
+      tagsLabel: "Planned technologies",
       category: 'Client work',
-      description: 'I’m designing a full-stack platform for a company’s internet services, currently focused on system architecture and infrastructure integration planning. Customers will be able to securely log in, manage or upgrade subscriptions, track usage, view payments and invoices, and receive renewal, payment and usage alerts. An admin dashboard is planned for managing customers, packages, payments, service status and reporting, with role-based access. I’m planning network integration through PPPoE, RADIUS or router APIs to automate provisioning, bandwidth and quota limits, subscription expiry and service restrictions.',
+      description: 'I’m designing a customer and operations platform for a company’s internet services. It will bring subscriptions, usage, billing and service administration into one system.',
       status: 'In progress',
       tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Authentication & authorization', 'Backend APIs', 'Network integration', 'System architecture'],
     },
     {
       title: 'Automated KPI reporting',
+      summary: [{"label": "Purpose", "text": "Replace a manual process for preparing KPI status reports."}, {"label": "My contribution", "text": "Built an LLM workflow, defined KPIs, prompts and input rules, and checked the output for consistency and clarity."}],
+      details: [{"label": "Workflow", "text": "The language-model workflow extracts and organises information for KPI status reports."}, {"label": "My contribution", "text": "I defined the KPIs, prompts and input rules, then checked the generated output for consistency and clarity."}, {"label": "Outcome", "text": "Delivered a workflow to replace the manual reporting process."}],
+      detailLabel: "View workflow details",
       category: 'Report automation',
       description: 'I built a language-model workflow to extract and organise information for KPI status reports, replacing a manual reporting process. I defined the KPIs, prompts and input rules, then checked the output for consistency and clarity.',
       status: 'Completed',
@@ -106,6 +134,9 @@ export const portfolio = {
     },
     {
       title: 'Liver cirrhosis risk modelling',
+      summary: [{"label": "Purpose", "text": "Explore liver cirrhosis risk using structured patient data."}, {"label": "My contribution", "text": "Cleaned the data, engineered features, and developed and evaluated predictive models."}],
+      details: [{"label": "Preparation", "text": "My work covered cleaning structured patient data and engineering features for predictive modelling."}, {"label": "Modelling and evaluation", "text": "I used statistical modelling and evaluation to examine how data and model choices affected the reliability of predictions."}],
+      detailLabel: "View modelling details",
       category: 'Predictive modelling',
       description: 'I developed a predictive model using structured patient data to explore liver cirrhosis risk. My work covered data cleaning, feature engineering, statistical modelling and evaluation, including how the data and model choices affected the reliability of predictions.',
       status: 'Completed',
@@ -113,6 +144,9 @@ export const portfolio = {
     },
     {
       title: 'Digital strategy for Cryos International',
+      summary: [{"label": "Team recommendation", "text": "More standardised processes and better integrated systems, weighing cost, risk and scalability."}, {"label": "My contribution", "text": "Coordination, quality checks and presentation of the recommendations."}, {"label": "Outcome", "text": "The team project received an A."}],
+      details: [{"label": "Team analysis", "text": "In a team of four, I analysed digital maturity, processes and systems."}, {"label": "Recommendation", "text": "We proposed more standardised ways of working and better integrated data, considering business needs, cost, risk and scalability."}, {"label": "My contribution", "text": "I contributed to coordination, quality checks and presenting our recommendations. The project received an A."}],
+      detailLabel: "View strategy details",
       category: 'Academic team project',
       description: 'In a team of four, I analysed Cryos International’s digital maturity, processes and systems. We proposed more standardised ways of working and better integrated data, weighing business needs against cost, risk and scalability. I contributed to coordination, quality checks and presenting our recommendations. The project received an A.',
       status: 'Completed',

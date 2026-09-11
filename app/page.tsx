@@ -3,6 +3,7 @@
 import { motion, MotionConfig, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { ProjectSummary, ProjectSkills, ProjectActions } from './project-content';
 import { portfolio, hasProjectImage, type Project } from './portfolio';
 import { FeaturedProjects, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParagraph, SkillItem, InterestObjects } from './motion';
 
@@ -98,42 +99,36 @@ function TypedLine({ text, delay, pace, className = '', enabled = true, onSettle
   </span>;
 }
 
-function IntroductionTitle({ onSettled }: { onSettled: () => void }) {
+function IntroductionTitle() {
   const firstName = portfolio.name.split(' ')[0];
   return <div className="hero-title">
     <p className="eyebrow"><span className="sr-only">Data science, AI, Software</span><TypedLine text="Data science · AI · Software" delay={0.15} pace={0.025} /></p>
     <h1 aria-label={`Hi, I’m ${firstName}.`}>
       <TypedLine text="Hi, I’m" delay={0.9} pace={0.085} className="typed-greeting" />
-      <TypedLine text={`${firstName}.`} delay={1.65} pace={0.115} className="typed-name" onSettled={onSettled} />
+      <TypedLine text={`${firstName}.`} delay={1.65} pace={0.115} className="typed-name" />
     </h1>
   </div>;
 }
 
-function IntroductionSummary({ enabled }: { enabled: boolean }) {
-  const reducedMotion = useReducedMotion();
-  const [settled, setSettled] = useState(false);
-  const showProjects = reducedMotion || settled;
+function IntroductionSummary() {
   return <div className="hero-summary">
-    <p><span className="sr-only">{portfolio.introduction}</span><TypedLine text={portfolio.introduction} delay={0.12} pace={0.014} className="typed-paragraph" enabled={enabled} onSettled={() => setSettled(true)} /></p>
-    <motion.div className="hero-action" inert={!showProjects} aria-hidden={!showProjects} initial={reducedMotion ? false : { opacity: 0, y: 14 }} animate={showProjects ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.65, ease: revealEase }}>
-      <MagneticLink className="round-link" href="#projects">See my projects <ArrowDown size={18} aria-hidden="true" /></MagneticLink>
-    </motion.div>
+    <p>{portfolio.introduction}</p>
+    <div className="hero-action"><MagneticLink className="round-link" href="#projects">See my projects <ArrowDown size={18} aria-hidden="true" /></MagneticLink></div>
   </div>;
 }
 
 function Hero() {
-  const [titleSettled, setTitleSettled] = useState(false);
   const hero = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: hero, offset: ['start start', 'end start'] });
   return <section className="hero" id="top" ref={hero}>
     <nav className="navigation" aria-label="Main navigation">
       <a className="wordmark" href="#top" aria-label="Back to home">{portfolio.name}</a>
-      <div className="nav-links"><a href="#about">About</a><a href="#projects">Projects</a><a href="#interests">Interests</a><a href="#contact">Contact</a></div>
+      <div className="nav-links"><a href="#projects">Projects</a><a href="#about">About</a><a href="#interests">Interests</a><a href="#contact">Contact</a></div>
     </nav>
     <div className="hero-content">
       <div className="hero-copy">
-        <IntroductionTitle onSettled={() => setTitleSettled(true)} />
-        <IntroductionSummary enabled={titleSettled} />
+        <IntroductionTitle />
+        <IntroductionSummary />
       </div>
       <Portrait progress={scrollYProgress} />
     </div>
@@ -157,17 +152,18 @@ function About() {
 }
 
 function ProjectEntry({ project }: { project: Project }) {
-  return <Reveal><article className={`project-entry${project.image ? ' has-preview' : ''}${project.status === 'In progress' ? ' project-entry-in-progress' : ''}`}>{project.image && <figure className="project-preview"><img src={project.image.src} alt={project.image.alt} width={project.image.width} height={project.image.height} loading="lazy" />{project.image.caption && <figcaption>{project.image.caption}</figcaption>}</figure>}<div className="project-body"><div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div><h3>{project.title}</h3><p>{project.description}</p><ul className="project-tags" aria-label="Project topics">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div>{project.url && <a className="project-link" href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${project.title} (new tab)`}><ArrowUpRight aria-hidden="true" /></a>}</article></Reveal>;
+  return <Reveal><article className={`project-entry${project.status === 'In progress' ? ' project-entry-in-progress' : ''}`}><div className="project-body"><div className="project-meta"><span>{project.category}</span><span className={`status ${project.status === 'In progress' ? 'in-progress' : ''}`}><i />{project.status}</span></div><h3>{project.title}</h3><ProjectSummary project={project} /><ProjectSkills project={project} /><ProjectActions project={project} /></div></article></Reveal>;
 }
 
 function Projects() {
+  const [mode, setMode] = useState<'Stack' | 'List'>('Stack');
   const [filter, setFilter] = useState<'All work' | Project['status']>('All work');
   const visible = portfolio.projects.filter(project => filter === 'All work' || project.status === filter);
   const illustrated = visible.filter(hasProjectImage);
   const withoutImages = visible.filter(project => !project.image);
   return <section className="section projects-section" id="projects"><SectionLabel>Projects</SectionLabel><div className="section-heading"><Reveal><h2>What I’ve<br /><span className="muted-word">been working on.</span></h2></Reveal><ScrollParagraph className="section-summary" text="Research from my studies, projects for clients, and a few things I’m building for myself." /></div>
-    <Reveal distance={24}><div className="project-filters" role="group" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</div></Reveal>
-    <div className="project-results" aria-live="polite">{illustrated.length > 0 && <FeaturedProjects key={filter} projects={illustrated} />}{withoutImages.map(project => <ProjectEntry key={project.title} project={project} />)}{visible.length === 0 && <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
+    <Reveal distance={24}><div className="project-toolbar"><div className="project-filters" role="group" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</div><div className="project-view-toggle" role="group" aria-label="Project layout">{(['Stack', 'List'] as const).map(value => <button type="button" key={value} aria-pressed={mode === value} onClick={() => setMode(value)}>{value}</button>)}</div></div></Reveal>
+    <div className="project-results" aria-live="polite">{illustrated.length > 0 && <FeaturedProjects key={filter} projects={illustrated} mode={mode} />}{withoutImages.map(project => <ProjectEntry key={project.title} project={project} />)}{visible.length === 0 && <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
   </section>;
 }
 
@@ -185,9 +181,9 @@ function Interests() {
 }
 
 function Contact() {
-  return <footer className="section contact-section" id="contact"><SectionLabel>Contact</SectionLabel><Reveal><h2>Say hello.</h2></Reveal><div className="contact-bottom"><ScrollParagraph text="I’m open to new roles, projects and collaborations. If you’d like to work together or talk about something I’ve built, get in touch." /><Reveal className="contact-links" delay={0.1}>{portfolio.contact.length ? portfolio.contact.map(link => <MagneticLink className="text-link" href={link.href} key={link.label}>{link.label}{link.href.startsWith('mailto:') ? <Mail size={18} aria-hidden="true" /> : link.href.startsWith('tel:') ? <Phone size={18} aria-hidden="true" /> : <ArrowUpRight size={18} aria-hidden="true" />}</MagneticLink>) : <p className="contact-pending">Contact details coming soon.</p>}</Reveal></div><Reveal className="footer-line" distance={18}><span>© {new Date().getFullYear()} {portfolio.name || 'Personal portfolio'}</span><a href="#top">Back to top ↑</a></Reveal></footer>;
+  return <footer className="section contact-section" id="contact"><SectionLabel>Contact</SectionLabel><Reveal><h2>Say hello.</h2></Reveal><div className="contact-bottom"><ScrollParagraph text="I’m interested in data science and software roles, and collaborations involving machine learning, data tools or web applications. I can contribute to data preparation, model evaluation, backend integrations and interface development." /><Reveal className="contact-links" delay={0.1}>{portfolio.contact.length ? portfolio.contact.map(link => <MagneticLink className="text-link" href={link.href} key={link.label}>{link.label}{link.href.startsWith('mailto:') ? <Mail size={18} aria-hidden="true" /> : link.href.startsWith('tel:') ? <Phone size={18} aria-hidden="true" /> : <ArrowUpRight size={18} aria-hidden="true" />}</MagneticLink>) : <p className="contact-pending">Contact details coming soon.</p>}</Reveal></div><Reveal className="footer-line" distance={18}><span>© {new Date().getFullYear()} {portfolio.name || 'Personal portfolio'}</span><a href="#top">Back to top ↑</a></Reveal></footer>;
 }
 
 export default function Home() {
-  return <MotionConfig reducedMotion="user"><a className="skip-link" href="#about">Skip introduction</a><main><Hero /><ProjectRibbon /><About /><Projects /><Interests /></main><Contact /></MotionConfig>;
+  return <MotionConfig reducedMotion="user"><a className="skip-link" href="#projects">Skip introduction</a><main><Hero /><ProjectRibbon /><Projects /><About /><Interests /></main><Contact /></MotionConfig>;
 }
