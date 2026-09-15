@@ -113,7 +113,7 @@ export function SkillItem({ name, description, index }: { name: string; descript
 }
 
 const visuals = [
-  { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
+  { image: '/images/projects/altawfiq-en.png', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
   { image: '/images/projects/personal-performance-overview.png', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
   { image: '/images/projects/energy-weather-dashboard.png', title: 'Energy & Weather', detail: 'Interactive dashboard', fit: 'cover' },
   { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
