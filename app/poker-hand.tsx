@@ -1,50 +1,72 @@
-import { useId } from 'react';
+'use client';
 
-/** Separate card layers let the hand open without moving the chip stack. */
-export function PokerHand() {
-  const id = useId().replace(/:/g, '');
-  const paper = `${id}-paper`;
-  const red = `${id}-red`;
-  const charcoal = `${id}-charcoal`;
-  return <svg className="poker-hand" viewBox="0 0 320 320" fill="none" aria-hidden="true">
-    <defs>
-      <linearGradient id={paper} x1="60" y1="55" x2="220" y2="250" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#faf8f1" /><stop offset=".5" stopColor="#dddcd8" /><stop offset="1" stopColor="#96999f" />
-      </linearGradient>
-      <linearGradient id={red} x1="0" y1="0" x2="0" y2="1">
-        <stop stopColor="#e35569" /><stop offset=".48" stopColor="#8f1e32" /><stop offset="1" stopColor="#42121f" />
-      </linearGradient>
-      <linearGradient id={charcoal} x1="0" y1="0" x2="0" y2="1">
-        <stop stopColor="#70737a" /><stop offset=".5" stopColor="#303239" /><stop offset="1" stopColor="#14151a" />
-      </linearGradient>
-    </defs>
-    <ellipse cx="168" cy="275" rx="115" ry="13" fill="#000" opacity=".35" />
-    {(['♠', '♥'] as const).map((suit, index) => <g key={suit} className={`poker-card poker-card-${index ? 'front' : 'back'}`}>
-      <rect x="94" y="47" width="123" height="184" rx="10" fill="#000" opacity=".3" transform="translate(3 7)" />
-      <rect x="94" y="47" width="123" height="184" rx="10" fill={`url(#${paper})`} stroke="#fff" strokeOpacity=".5" />
-      <rect x="101" y="54" width="109" height="170" rx="6" stroke="#666972" strokeOpacity=".25" />
-      <g fill={index ? '#ad263f' : '#20232a'} fontFamily="Georgia, serif" textAnchor="middle">
-        <text x="111" y="79" fontSize="25">A</text>
-        <text x="111" y="100" fontSize="22">{suit}</text>
-        <text x="155.5" y="167" fontSize="77">{suit}</text>
-        <g transform="rotate(180 155.5 139)">
-          <text x="111" y="79" fontSize="25">A</text>
-          <text x="111" y="100" fontSize="22">{suit}</text>
-        </g>
-      </g>
-    </g>)}
-    {[0, 1, 2, 3].map(chip => <g key={chip} transform={`translate(219 ${260 - chip * 9})`}>
-      <ellipse cy="5" rx="43" ry="17" fill={`url(#${chip % 2 ? red : charcoal})`} stroke="#111217" />
-      <path d="M-35 3v6M-19 11v7M3 14v7M25 9v7M39 1v7" stroke="#e0d9ce" strokeWidth="5" opacity=".65" />
-      <ellipse rx="43" ry="16" fill={`url(#${chip % 2 ? red : charcoal})`} stroke="#a6a0a1" strokeOpacity=".5" />
-      <ellipse rx="35" ry="12" stroke="#eadfda" strokeWidth="5" strokeDasharray="9 13" />
-      <ellipse rx="26" ry="9" stroke="#e6c9ca" strokeOpacity=".6" />
-    </g>)}
-    <g className="poker-chip" transform="translate(113 262) rotate(-17)">
-      <ellipse cy="5" rx="39" ry="16" fill={`url(#${red})`} stroke="#471525" />
-      <ellipse rx="39" ry="16" fill={`url(#${red})`} stroke="#f1959f" strokeOpacity=".6" />
-      <ellipse rx="32" ry="12" stroke="#eadfda" strokeWidth="5" strokeDasharray="9 12" />
-      <ellipse rx="23" ry="8" stroke="#edb0b9" strokeOpacity=".7" />
-    </g>
-  </svg>;
+import { useEffect, useRef, useState } from 'react';
+import type { AnimationItem } from 'lottie-web';
+
+// Chan Pan's Poker Chip Shuffle, distributed under the Lottie Simple License.
+// Preserve 120 frames at 60 fps and the five-frame offsets between chips.
+export function PokerHand({ active }: { active: boolean }) {
+  const host = useRef<HTMLDivElement>(null);
+  const player = useRef<AnimationItem | null>(null);
+  const activeRef = useRef(active);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    activeRef.current = active;
+    if (active) player.current?.play();
+    else player.current?.pause();
+  }, [active]);
+
+  useEffect(() => {
+    const container = host.current;
+    if (!container) return;
+    let cancelled = false;
+    let animation: AnimationItem | undefined;
+    const controller = new AbortController();
+    Promise.all([
+      import('lottie-web/build/player/lottie_light'),
+      fetch('/images/interests/poker-chip-shuffle.json', { signal: controller.signal }).then(response => {
+        if (!response.ok) throw new Error('Poker animation unavailable');
+        return response.json();
+      }),
+    ]).then(([{ default: lottie }, animationData]) => {
+      if (cancelled) return;
+      animation = lottie.loadAnimation({
+        container, renderer: 'svg', loop: true, autoplay: false,
+        animationData, rendererSettings: { preserveAspectRatio: 'xMidYMid meet' },
+      });
+      player.current = animation;
+      animation.addEventListener('DOMLoaded', () => {
+        if (cancelled || !animation) return;
+        setReady(true);
+        if (activeRef.current) animation.play();
+      });
+      animation.addEventListener('data_failed', () => {
+        if (!cancelled) setReady(false);
+      });
+    }).catch(() => {
+      // Keep the static chip stacks if the renderer or local asset cannot load.
+    });
+    return () => {
+      cancelled = true;
+      controller.abort();
+      animation?.destroy();
+      player.current = null;
+    };
+  }, []);
+
+  return <div className="poker-hand" data-ready={ready} aria-hidden="true">
+    <svg className="poker-fallback" viewBox="0 0 320 320" fill="none">
+      {[103, 217].map(x => <g key={x}>
+        {[0, 1, 2, 3, 4, 5].map(chip => <g key={chip} transform={`translate(${x} ${253 - chip * 15})`}>
+          <path d="M-55 0v13a55 18 0 0 0 110 0V0" fill="#9e293c" stroke="#611c2b" />
+          <path d="M-43 10v13M-7 17v14M33 14v13" stroke="#c9cbd0" strokeWidth="12" />
+          <ellipse rx="55" ry="18" fill="#c43d51" stroke="#e56a7d" />
+          <ellipse rx="46" ry="14" stroke="#e4e6ea" strokeWidth="6" strokeDasharray="16 18" />
+          <ellipse rx="32" ry="10" fill="#e4e6ea" />
+        </g>)}
+      </g>)}
+    </svg>
+    <div className="poker-player" ref={host} />
+  </div>;
 }

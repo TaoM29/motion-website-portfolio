@@ -206,7 +206,7 @@ function InterestObject({ object, index, progress, active }: { object: typeof in
   return <div className={`interest-object interest-${object.kind}`} onPointerMove={move} onPointerLeave={reset} onPointerCancel={reset}>
     <motion.div className="interest-drift" style={active ? { y: scrollY, rotate: scrollRotate } : { y: 0, rotate: 0 }}>
       <motion.div className="interest-tilt" style={active && pointerEnabled ? { x, y, rotateX, rotateY, transformPerspective: 800 } : { x: 0, y: 0, rotateX: 0, rotateY: 0 }}>
-        <div className="interest-object-angle">{object.kind === 'poker' ? <PokerHand /> : <img className="interest-loop" src={object.image} alt="" width={object.size} height={object.size} loading="lazy" draggable={false} />}</div>
+        <div className="interest-object-angle">{object.kind === 'poker' ? <PokerHand active={active} /> : <img className="interest-loop" src={object.image} alt="" width={object.size} height={object.size} loading="lazy" draggable={false} />}</div>
       </motion.div>
     </motion.div>
     {object.kind === 'vinyl' && <div className="interest-equalizer">{[0, 1, 2, 3, 4, 5, 6].map(bar => <i key={bar} style={{ animationDelay: `${bar * -0.19}s` }} />)}</div>}

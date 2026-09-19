@@ -258,14 +258,11 @@ h3 { font-weight: 400; }
 .interest-strength .interest-loop { animation: interest-lift 4.6s ease-in-out infinite; }
 .interest-running .interest-loop { animation: interest-stride 2.8s cubic-bezier(.45, 0, .3, 1) infinite; }
 .interest-poker { mix-blend-mode: normal; }
-.poker-hand { display: block; width: 100%; height: auto; overflow: visible; }
-.poker-card { transform-origin: 156px 224px; }
-.poker-card-back { transform: translate(-17px, 0) rotate(-17deg); animation: poker-fan-back 6s ease-in-out infinite; }
-.poker-card-front { transform: translate(13px, -5px) rotate(12deg); animation: poker-fan-front 6s ease-in-out infinite; }
-.interest-gallery .poker-card { animation-play-state: paused; }
-.interest-gallery[data-active='true'] .poker-card { animation-play-state: running; }
-@keyframes poker-fan-back { 0%, 15%, 85%, 100% { transform: translate(-17px, 0) rotate(-17deg); } 40%, 60% { transform: translate(-24px, -5px) rotate(-25deg); } }
-@keyframes poker-fan-front { 0%, 15%, 85%, 100% { transform: translate(13px, -5px) rotate(12deg); } 40%, 60% { transform: translate(22px, -13px) rotate(22deg); } }
+.poker-hand { position: relative; width: 100%; aspect-ratio: 1; }
+.poker-player, .poker-fallback { position: absolute; inset: 0; width: 100%; height: 100%; }
+.poker-player { opacity: 0; }
+.poker-hand[data-ready='true'] .poker-player { opacity: 1; }
+.poker-hand[data-ready='true'] .poker-fallback { visibility: hidden; }
 .interest-equalizer { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 22px; display: flex; align-items: center; gap: 4px; opacity: .75; }
 .interest-equalizer i { width: 3px; height: 100%; border-radius: 3px; background: #ef6578; transform: scaleY(.35); animation: interest-beat 1.15s ease-in-out infinite alternate; }
 .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i { animation-play-state: paused; }
@@ -297,7 +294,7 @@ h3 { font-weight: 400; }
 .tennis-fallback-ball img { position: absolute; width: 142%; max-width: none; height: 142%; left: -20%; top: -19%; }
 @media (prefers-reduced-motion: reduce) {
  .tennis-canvas { transition: none; }
- .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i, .interest-gallery .poker-card { animation: none; }
+ .interest-gallery .interest-loop, .interest-gallery .interest-equalizer i { animation: none; }
  .interest-motion-control { display: none; }
 }
 
