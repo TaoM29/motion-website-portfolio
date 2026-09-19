@@ -6,6 +6,7 @@ import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { type ProjectWithImage } from './portfolio';
 import { ProjectSummary, ProjectSkills, ProjectActions, ProjectImage } from './project-content';
 import { TennisDribble } from './tennis-dribble';
+import { PokerHand } from './poker-hand';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -182,6 +183,7 @@ const interestObjects = [
   { kind: 'vinyl', image: '/images/interests/vinyl-record.png', size: 1254 },
   { kind: 'strength', image: '/images/interests/dumbbell.png', size: 1254 },
   { kind: 'running', image: '/images/interests/running-shoe.png', size: 1254 },
+  { kind: 'poker', image: null, size: 320 },
 ] as const;
 
 function InterestObject({ object, index, progress, active }: { object: typeof interestObjects[number]; index: number; progress: MotionValue<number>; active: boolean }) {
@@ -204,7 +206,7 @@ function InterestObject({ object, index, progress, active }: { object: typeof in
   return <div className={`interest-object interest-${object.kind}`} onPointerMove={move} onPointerLeave={reset} onPointerCancel={reset}>
     <motion.div className="interest-drift" style={active ? { y: scrollY, rotate: scrollRotate } : { y: 0, rotate: 0 }}>
       <motion.div className="interest-tilt" style={active && pointerEnabled ? { x, y, rotateX, rotateY, transformPerspective: 800 } : { x: 0, y: 0, rotateX: 0, rotateY: 0 }}>
-        <div className="interest-object-angle"><img className="interest-loop" src={object.image} alt="" width={object.size} height={object.size} loading="lazy" draggable={false} /></div>
+        <div className="interest-object-angle">{object.kind === 'poker' ? <PokerHand /> : <img className="interest-loop" src={object.image} alt="" width={object.size} height={object.size} loading="lazy" draggable={false} />}</div>
       </motion.div>
     </motion.div>
     {object.kind === 'vinyl' && <div className="interest-equalizer">{[0, 1, 2, 3, 4, 5, 6].map(bar => <i key={bar} style={{ animationDelay: `${bar * -0.19}s` }} />)}</div>}

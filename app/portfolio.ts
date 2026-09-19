@@ -46,7 +46,7 @@ export const portfolio = {
   ],
   outsideWork: [
     'Outside work, I spend a lot of time playing tennis, strength training and running. I enjoy the competition, and training helps me clear my head and stay focused.',
-    'I also DJ and listen to a lot of house music.',
+    'I also play poker, DJ and listen to a lot of house music.',
     'I like being around people and making time for friends. Keeping a balance between work, training and a social life matters to me.',
   ],
   contact: [
