@@ -1,6 +1,6 @@
 Poker Chip Shuffle by Chan Pan
 Source: https://lottiefiles.com/free-animation/poker-chip-shuffle-lmbBs6wzn8
-Asset: poker-chip-shuffle.json (original animation, unmodified)
+Asset: poker-chip-shuffle.json (color adaptation: burgundy, rose and cool silver; original motion unchanged)
 License: https://lottiefiles.com/page/license
 
 Lottie Simple License (FL 9.13.21)

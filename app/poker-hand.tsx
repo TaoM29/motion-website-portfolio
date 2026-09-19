@@ -59,9 +59,9 @@ export function PokerHand({ active }: { active: boolean }) {
     <svg className="poker-fallback" viewBox="0 0 320 320" fill="none">
       {[103, 217].map(x => <g key={x}>
         {[0, 1, 2, 3, 4, 5].map(chip => <g key={chip} transform={`translate(${x} ${253 - chip * 15})`}>
-          <path d="M-55 0v13a55 18 0 0 0 110 0V0" fill="#9e293c" stroke="#611c2b" />
-          <path d="M-43 10v13M-7 17v14M33 14v13" stroke="#c9cbd0" strokeWidth="12" />
-          <ellipse rx="55" ry="18" fill="#c43d51" stroke="#e56a7d" />
+          <path d="M-55 0v13a55 18 0 0 0 110 0V0" fill="#851e34" stroke="#59121d" />
+          <path d="M-43 10v13M-7 17v14M33 14v13" stroke="#bcc0c9" strokeWidth="12" />
+          <ellipse rx="55" ry="18" fill="#de354b" stroke="#ef6578" />
           <ellipse rx="46" ry="14" stroke="#e4e6ea" strokeWidth="6" strokeDasharray="16 18" />
           <ellipse rx="32" ry="10" fill="#e4e6ea" />
         </g>)}
