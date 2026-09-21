@@ -95,7 +95,7 @@ export const portfolio = {
       details: [{"label": "Dashboard", "text": "Explore Elhub energy data and Open-Meteo weather data across NO1–NO5, with regional maps and snow drift views."}, {"label": "Analysis", "text": "Compare patterns with correlation, decomposition and spectral tools, inspect data quality, and evaluate forecast benchmarks and custom jobs with uncertainty metrics."}, {"label": "Delivery", "text": "Rebuilt the former Streamlit app with Next.js and FastAPI. The dashboard makes methods, data freshness and sources visible alongside the analysis."}],
       detailLabel: "View analysis details",
       url: 'https://norwegian-energy-dashboard.vercel.app',
-      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Energy overview dashboard showing Norwegian production, consumption, regional price areas and supply and demand trends', width: 2880, height: 1622, caption: 'Energy overview across Norway’s regions' },
+      image: { src: '/images/projects/energy-weather-dashboard.png', alt: 'Energy overview dashboard showing Norwegian production, consumption, regional price areas and supply and demand trends', width: 2880, height: 1626, caption: 'Energy overview across Norway’s regions' },
       category: 'Data analysis',
       description: 'I rebuilt a Norwegian energy and weather dashboard with Next.js and FastAPI, combining Elhub and Open-Meteo data across Norway’s five electricity price areas. It includes regional maps, snow drift views, time series diagnostics and forecast evaluation, with visible data sources and freshness.',
       status: 'Completed',
