@@ -116,11 +116,18 @@ export function SkillItem({ name, description, index }: { name: string; descript
 const visuals = [
   { image: '/images/projects/altawfiq-en.png', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
   { image: '/images/projects/personal-performance-overview.png', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
-  { image: '/images/projects/energy-weather-dashboard.png', title: 'Energy & Weather', detail: 'Interactive dashboard', fit: 'cover' },
+  { image: '/images/projects/energy-weather-dashboard.png', bottomImage: '/images/projects/energy-weather-dashboard-light.png', title: 'Energy & Weather', detail: 'Dark theme', bottomDetail: 'Light theme', fit: 'cover' },
   { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
   { image: '/images/projects/morrise-marine-service.png', title: 'Morrise Marine Service', detail: 'Website in development', fit: 'cover' },
   { image: '/images/projects/altawfiq-ar.png', title: 'AL-TAWFIQ', detail: 'Arabic website', fit: 'cover' },
 ] as const;
+
+const ribbonRows = [
+  visuals,
+  [...visuals].reverse().map(visual => 'bottomImage' in visual
+    ? { ...visual, image: visual.bottomImage, detail: visual.bottomDetail }
+    : visual),
+];
 
 export function ProjectRibbon() {
   const section = useRef<HTMLElement>(null);
@@ -129,7 +136,7 @@ export function ProjectRibbon() {
   const right = useTransform(scrollYProgress, [0, 1], [-360, -40]);
   const left = useTransform(scrollYProgress, [0, 1], [-40, -360]);
   return <section className="project-ribbon" ref={section} aria-label="A glimpse of my work" data-motion={enabled}>
-    {[visuals, [...visuals].reverse()].map((row, rowIndex) => <div className="ribbon-window" key={rowIndex}>
+    {ribbonRows.map((row, rowIndex) => <div className="ribbon-window" key={rowIndex}>
       <motion.div className="ribbon-track" style={{ x: enabled ? rowIndex === 0 ? right : left : 0 }}>
         {[0, 1, 2].flatMap(repeat => row.map((visual, index) => <a className={`ribbon-tile${repeat ? ' ribbon-repeat' : ''}`} href="#projects" key={`${repeat}-${index}`} aria-hidden={repeat ? true : undefined} tabIndex={repeat ? -1 : 0}>
           <div className={`ribbon-image ${visual.fit}`}><img src={visual.image} alt="" loading="lazy" width={1440} height={960} /></div>
