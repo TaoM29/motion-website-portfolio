@@ -118,7 +118,7 @@ const visuals = [
   { image: '/images/projects/personal-performance-overview.png', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
   { image: '/images/projects/energy-weather-dashboard.png', bottomImage: '/images/projects/energy-weather-dashboard-light.png', title: 'Energy & Weather', detail: 'Dark theme', bottomDetail: 'Light theme', fit: 'cover' },
   { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
-  { image: '/images/projects/morrise-marine-service.png', title: 'Morrise Marine Service', detail: 'Website in development', fit: 'cover' },
+  { image: '/images/projects/morrise-marine-service.png', title: 'Morrise Marine Service', detail: 'Completed website', fit: 'cover' },
   { image: '/images/projects/altawfiq-ar.png', title: 'AL-TAWFIQ', detail: 'Arabic website', fit: 'cover' },
 ] as const;
 
