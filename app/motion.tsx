@@ -108,18 +108,18 @@ export function SkillItem({ name, description, index }: { name: string; descript
     ry.set((event.clientX - rect.left - rect.width / 2) / rect.width * 5);
   };
   return <motion.li className="skill-depth" onPointerMove={move} onPointerLeave={reset} onPointerCancel={reset} style={enabled ? { rotateX, rotateY, transformPerspective: 900 } : { rotateX: 0, rotateY: 0 }}
-    initial={reduced ? false : { opacity: 0, y: 26 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.65, delay: reduced ? 0 : index % 2 * 0.08, ease }}>
+    initial={reduced ? false : { y: 26 }} whileInView={{ y: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.65, delay: reduced ? 0 : index % 2 * 0.08, ease }}>
     <strong>{name}</strong><span>{description}</span>
   </motion.li>;
 }
 
 const visuals = [
-  { image: '/images/projects/altawfiq-en.png', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
-  { image: '/images/projects/personal-performance-overview.png', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
-  { image: '/images/projects/energy-weather-dashboard.png', bottomImage: '/images/projects/energy-weather-dashboard-light.png', title: 'Energy & Weather', detail: 'Dark theme', bottomDetail: 'Light theme', fit: 'cover' },
-  { image: '/images/projects/lung-ct-illustration.png', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
-  { image: '/images/projects/morrise-marine-service.png', title: 'Morrise Marine Service', detail: 'Completed website', fit: 'cover' },
-  { image: '/images/projects/altawfiq-ar.png', title: 'AL-TAWFIQ', detail: 'Arabic website', fit: 'cover' },
+  { image: '/images/projects/altawfiq-en.webp', title: 'AL-TAWFIQ', detail: 'English website', fit: 'cover' },
+  { image: '/images/projects/personal-performance-overview.webp', title: 'Personal Performance', detail: 'Overview design', fit: 'cover' },
+  { image: '/images/projects/energy-weather-dashboard.webp', bottomImage: '/images/projects/energy-weather-dashboard-light.webp', title: 'Energy & Weather', detail: 'Dark theme', bottomDetail: 'Light theme', fit: 'cover' },
+  { image: '/images/projects/lung-ct-illustration.webp', title: 'Lung CT research', detail: 'AI-generated illustration', fit: 'artwork' },
+  { image: '/images/projects/morrise-marine-service.webp', title: 'Morrise Marine Service', detail: 'Completed website', fit: 'cover' },
+  { image: '/images/projects/altawfiq-ar.webp', title: 'AL-TAWFIQ', detail: 'Arabic website', fit: 'cover' },
 ] as const;
 
 const ribbonRows = [
@@ -187,9 +187,9 @@ export function FeaturedProjects({ projects, mode = 'Stack' }: { projects: Proje
 }
 
 const interestObjects = [
-  { kind: 'vinyl', image: '/images/interests/vinyl-record.png', size: 1254 },
-  { kind: 'strength', image: '/images/interests/dumbbell.png', size: 1254 },
-  { kind: 'running', image: '/images/interests/running-shoe.png', size: 1254 },
+  { kind: 'vinyl', image: '/images/interests/vinyl-record.webp', size: 1254 },
+  { kind: 'strength', image: '/images/interests/dumbbell.webp', size: 1254 },
+  { kind: 'running', image: '/images/interests/running-shoe.webp', size: 1254 },
   { kind: 'poker', image: null, size: 320 },
 ] as const;
 

@@ -10,7 +10,7 @@ import { FeaturedProjects, MagneticLink, OrbitAccent, ProjectRibbon, ScrollParag
 const revealEase = [0.22, 1, 0.36, 1] as const;
 function Reveal({ children, className = '', delay = 0, distance = 42 }: { children: ReactNode; className?: string; delay?: number; distance?: number }) {
   const reducedMotion = useReducedMotion();
-  return <motion.div className={className} initial={reducedMotion ? false : { opacity: 0, y: distance }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 0.9, delay, ease: revealEase }}>{children}</motion.div>;
+  return <motion.div className={className} initial={reducedMotion ? false : { y: distance }} whileInView={{ y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 0.9, delay, ease: revealEase }}>{children}</motion.div>;
 }
 
 function Portrait({ progress }: { progress: MotionValue<number> }) {
@@ -63,7 +63,7 @@ function Portrait({ progress }: { progress: MotionValue<number> }) {
   return <div className="portrait-stage" ref={stage}>
     <motion.div className="portrait-scroll" style={reducedMotion ? {} : { y: scrollY, scale }}>
       <motion.div className="portrait-tilt" style={reducedMotion ? { x: 0, y: 0, rotate: 0, rotateX: 0, rotateY: 0 } : { x, y, rotate, rotateX, rotateY }}>
-        <div className="portrait-float"><img className="portrait" src="/images/personal-avatar-head.png" width="1254" height="1254" alt="Floating 3D illustrated head of Taofik Muhriz" fetchPriority="high" draggable={false} /></div>
+        <div className="portrait-float"><img className="portrait" src="/images/personal-avatar-head.webp" srcSet="/images/personal-avatar-head-small.webp 480w, /images/personal-avatar-head.webp 960w" sizes="(max-width: 760px) 88vw, 44vw" width="1254" height="1254" alt="Floating 3D illustrated head of Taofik Muhriz" fetchPriority="high" draggable={false} /></div>
       </motion.div>
     </motion.div>
   </div>;
@@ -71,7 +71,8 @@ function Portrait({ progress }: { progress: MotionValue<number> }) {
 
 function TypedLine({ text, delay, pace, className = '', enabled = true, onSettled }: { text: string; delay: number; pace: number; className?: string; enabled?: boolean; onSettled?: () => void }) {
   const reducedMotion = useReducedMotion();
-  const [count, setCount] = useState(0);
+  // Static HTML and the first hydration render contain the complete greeting.
+  const [count, setCount] = useState(() => Array.from(text).length);
   const [started, setStarted] = useState(false);
   const characters = Array.from(text);
 
@@ -103,7 +104,8 @@ function IntroductionTitle() {
   const firstName = portfolio.name.split(' ')[0];
   return <div className="hero-title">
     <p className="eyebrow"><span className="sr-only">Data science, AI, Software</span><TypedLine text="Data science · AI · Software" delay={0.15} pace={0.025} /></p>
-    <h1 aria-label={`Hi, I’m ${firstName}.`}>
+    <h1 aria-label={`${portfolio.name} — Data Science & Software`}>
+      <span className="sr-only">{portfolio.name} — Data Science &amp; Software</span>
       <TypedLine text="Hi, I’m" delay={0.9} pace={0.085} className="typed-greeting" />
       <TypedLine text={`${firstName}.`} delay={1.65} pace={0.115} className="typed-name" />
     </h1>

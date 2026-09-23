@@ -7,10 +7,12 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5173",
-    "build": "vite build",
+    "build": "node scripts/build.mjs",
     "start": "vite preview --host 127.0.0.1 --port 4173",
     "lint": "oxlint",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "images": "node scripts/optimize-images.mjs",
+    "test:seo": "node --test tests/seo.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
@@ -50,6 +52,7 @@
     "oxfmt": "0.61.0",
     "oxlint": "1.76.0",
     "oxlint-tsgolint": "7.0.2001",
+    "sharp": "^0.35.4",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vite": "8.0.13",

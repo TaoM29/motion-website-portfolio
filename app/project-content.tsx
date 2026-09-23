@@ -19,6 +19,7 @@ export function ProjectSkills({ project }: { project: Project }) {
 
 export function ProjectActions({ project }: { project: Project }) {
   return <div className="project-actions">
+    <a className="project-detail-button" href={`/projects/${project.slug}`} aria-label={`Read case study: ${project.title}`}>Read case study<ArrowUpRight size={17} aria-hidden="true" /></a>
     {project.details && <Sheet><SheetTrigger className="project-detail-button">{project.detailLabel ?? 'View project details'}<ArrowUpRight size={17} aria-hidden="true" /></SheetTrigger>
       <SheetContent className="project-detail-panel">
         <p className="project-detail-category">{project.category} · {project.status}</p>
