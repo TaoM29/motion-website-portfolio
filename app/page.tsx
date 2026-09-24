@@ -69,7 +69,7 @@ function Portrait({ progress }: { progress: MotionValue<number> }) {
   </div>;
 }
 
-function TypedLine({ text, delay, pace, className = '', enabled = true, onSettled }: { text: string; delay: number; pace: number; className?: string; enabled?: boolean; onSettled?: () => void }) {
+function TypedLine({ text, delay, pace, className = '' }: { text: string; delay: number; pace: number; className?: string }) {
   const reducedMotion = useReducedMotion();
   // Static HTML and the first hydration render contain the complete greeting.
   const [count, setCount] = useState(() => Array.from(text).length);
@@ -77,26 +77,29 @@ function TypedLine({ text, delay, pace, className = '', enabled = true, onSettle
   const characters = Array.from(text);
 
   useEffect(() => {
-    if (reducedMotion || !enabled) return;
+    if (reducedMotion) return;
     let timeout = 0;
     let current = 0;
-    setCount(0);
-    setStarted(false);
     const tick = () => {
       setStarted(true);
       current += 1;
       setCount(current);
       if (current < Array.from(text).length) timeout = window.setTimeout(tick, pace * 1000);
     };
-    timeout = window.setTimeout(tick, delay * 1000);
-    return () => window.clearTimeout(timeout);
-  }, [text, delay, pace, reducedMotion, enabled]);
+    // Start the browser animation after hydration; prerendered text stays complete.
+    const frame = requestAnimationFrame(() => {
+      setCount(0);
+      setStarted(false);
+      timeout = window.setTimeout(tick, delay * 1000);
+    });
+    return () => { cancelAnimationFrame(frame); window.clearTimeout(timeout); };
+  }, [text, delay, pace, reducedMotion]);
 
   const visibleCount = reducedMotion ? characters.length : count;
   const complete = visibleCount >= characters.length;
   return <span className={`typed-line ${className}`} aria-hidden="true" data-complete={complete}>
     <span className="typed-placeholder">{text}</span>
-    <span className="typed-output">{characters.slice(0, visibleCount).join('')}{started && !reducedMotion && <span className={`typing-cursor${complete ? ' is-finished' : ''}`} onAnimationEnd={event => { if (event.animationName === 'cursor-fade') onSettled?.(); }} />}</span>
+    <span className="typed-output">{characters.slice(0, visibleCount).join('')}{started && !reducedMotion && <span className={`typing-cursor${complete ? ' is-finished' : ''}`} />}</span>
   </span>;
 }
 
@@ -164,7 +167,7 @@ function Projects() {
   const illustrated = visible.filter(hasProjectImage);
   const withoutImages = visible.filter(project => !project.image);
   return <section className="section projects-section" id="projects"><SectionLabel>Projects</SectionLabel><div className="section-heading"><Reveal><h2>What I’ve<br /><span className="muted-word">been working on.</span></h2></Reveal><ScrollParagraph className="section-summary" text="Research from my studies, projects for clients, and a few things I’m building for myself." /></div>
-    <Reveal distance={24}><div className="project-toolbar"><div className="project-filters" role="group" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</div><div className="project-view-toggle" role="group" aria-label="Project layout">{(['Stack', 'List'] as const).map(value => <button type="button" key={value} aria-pressed={mode === value} onClick={() => setMode(value)}>{value}</button>)}</div></div></Reveal>
+    <Reveal distance={24}><div className="project-toolbar"><fieldset className="project-filters" aria-label="Filter projects">{(['All work', 'Completed', 'In progress'] as const).map(value => <button type="button" key={value} onClick={() => setFilter(value)} aria-pressed={filter === value}>{value}<span>{value === 'All work' ? portfolio.projects.length : portfolio.projects.filter(project => project.status === value).length}</span></button>)}</fieldset><fieldset className="project-view-toggle" aria-label="Project layout">{(['Stack', 'List'] as const).map(value => <button type="button" key={value} aria-pressed={mode === value} onClick={() => setMode(value)}>{value}</button>)}</fieldset></div></Reveal>
     <div className="project-results" aria-live="polite">{illustrated.length > 0 && <FeaturedProjects key={filter} projects={illustrated} mode={mode} />}{withoutImages.map(project => <ProjectEntry key={project.title} project={project} />)}{visible.length === 0 && <div className="empty-projects"><p>More work to share soon.</p><span>Completed projects will appear here as they’re added to my portfolio.</span></div>}</div>
   </section>;
 }

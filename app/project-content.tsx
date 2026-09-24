@@ -38,10 +38,10 @@ export function ProjectImage({ project }: { project: ProjectWithImage }) {
   const visual = project.image;
   const selected = arabic && project.alternateImage ? project.alternateImage : visual;
   return <figure className={`stacked-visual ${visual.fit ?? 'cover'}`}>
-    {project.alternateImage && <div className="project-language" role="group" aria-label={`${project.title} screenshot language`}>
+    {project.alternateImage && <fieldset className="project-language" aria-label={`${project.title} screenshot language`}>
       <button type="button" aria-pressed={!arabic} onClick={() => setArabic(false)}>English</button>
       <button type="button" aria-pressed={arabic} onClick={() => setArabic(true)}>{project.alternateImage.label}</button>
-    </div>}
+    </fieldset>}
     <Dialog>
       <DialogTrigger className="stacked-image project-image-button" aria-label={`Enlarge ${project.title} image${project.alternateImage ? arabic ? ' in Arabic' : ' in English' : ''}`}>
         <img src={selected.src} alt={selected.alt} width={visual.width} height={visual.height} loading="lazy" />

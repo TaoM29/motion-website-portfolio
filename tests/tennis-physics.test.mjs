@@ -4,7 +4,7 @@ import { createTennisState, stepTennis, TENNIS_STEP, GRAVITY, RACKET_RESTITUTION
 import { createRacket, createTennisBall } from '../app/tennis-model.ts';
 import { Box3, Raycaster, Vector3 } from 'three';
 
-test('the ball accelerates under gravity between contacts', () => {
+void test('the ball accelerates under gravity between contacts', () => {
   const state = createTennisState();
   state.ballHeight = 0.5;
   state.ballVelocity = -0.2;
@@ -35,20 +35,20 @@ function simulate(strength, seconds = 30) {
   return { state, averageSpeed: outgoing.slice(5).reduce((sum, value) => sum + value, 0) / (outgoing.length - 5) };
 }
 
-test('repeated racket and floor contacts stay stable and share one collision state', () => {
+void test('repeated racket and floor contacts stay stable and share one collision state', () => {
   const { state } = simulate(1, 60);
   assert.ok(state.racketHits > 60);
   assert.ok(Math.abs(state.racketHits - state.floorHits) <= 1);
 });
 
-test('a faster swing produces a faster ball and more frequent floor bounces', () => {
+void test('a faster swing produces a faster ball and more frequent floor bounces', () => {
   const gentle = simulate(0.85);
   const firm = simulate(1.15);
   assert.ok(firm.averageSpeed > gentle.averageSpeed * 1.2);
   assert.ok(firm.state.floorHits > gentle.state.floorHits);
 });
 
-test('the racket has a solid 3D frame, open centre, strings and volume in the grip', () => {
+void test('the racket has a solid 3D frame, open centre, strings and volume in the grip', () => {
   const racket = createRacket();
   racket.updateMatrixWorld(true);
   const frame = racket.getObjectByName('Solid hoop');

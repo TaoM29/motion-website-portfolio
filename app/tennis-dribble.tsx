@@ -1,7 +1,6 @@
 'use client';
 
 // These local fallback assets are served directly by Vite, without a Next image server.
-/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import type { TennisLayout, TennisScene } from './tennis-scene';
