@@ -244,6 +244,7 @@ export function InterestObjects() {
       {interestObjects.map((object, index) => <InterestObject key={object.kind} object={object} index={index + 1} progress={scrollYProgress} active={active} />)}
     </div>
     <TennisDribble slot={tennisSlot} gallery={ref} active={active} />
-    {!reduced && <div className="interest-motion-control"><button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume interest animations' : 'Pause interest animations'}>{paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}{paused ? 'Resume motion' : 'Pause motion'}</button></div>}
+    {/* CSS handles reduced-motion visibility so server and client markup match. */}
+    <div className="interest-motion-control"><button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume interest animations' : 'Pause interest animations'}>{paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}{paused ? 'Resume motion' : 'Pause motion'}</button></div>
   </div>;
 }
