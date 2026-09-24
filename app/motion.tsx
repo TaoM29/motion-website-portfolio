@@ -10,7 +10,7 @@ import { PokerHand } from './poker-hand';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-function useMotionEnabled(query = '(min-width: 761px)') {
+function useMotionEnabled(query = 'all') {
   const reduced = useReducedMotion();
   const [matches, setMatches] = useState(false);
   useEffect(() => {
@@ -164,16 +164,20 @@ function StackedProject({ project, index, count, top, progress, enabled }: { pro
 
 export function FeaturedProjects({ projects, mode = 'Stack' }: { projects: ProjectWithImage[]; mode?: 'Stack' | 'List' }) {
   const stack = useRef<HTMLDivElement>(null);
-  const motionEnabled = useMotionEnabled('(min-width: 1001px) and (min-height: 800px)');
-  const [cardsFit, setCardsFit] = useState(false);
+  const motionEnabled = useMotionEnabled();
+  const [stickyTops, setStickyTops] = useState<number[]>([]);
   const stackStep = Math.min(26, 78 / Math.max(projects.length - 1, 1));
-  const enabled = mode === 'Stack' && motionEnabled && cardsFit;
+  const enabled = mode === 'Stack' && motionEnabled && stickyTops.length === projects.length;
   const { scrollYProgress } = useScroll({ target: stack, offset: ['start start', 'end end'] });
 
   useEffect(() => {
     const cards = Array.from(stack.current?.children ?? []) as HTMLElement[];
-    // Fold only when every card's content fits below its sticky position.
-    const update = () => setCardsFit(cards.every((card, index) => card.offsetHeight + 68 + index * stackStep <= window.innerHeight - 24));
+    // Tall cards scroll through fully before sticking, including on phones.
+    // Measure layout height, not the animated/scaled bounding rectangle.
+    const update = () => {
+      const tops = cards.map((card, index) => Math.min(68 + index * stackStep, window.innerHeight - card.offsetHeight - 24));
+      setStickyTops(previous => previous.length === tops.length && previous.every((top, index) => top === tops[index]) ? previous : tops);
+    };
     const observer = new ResizeObserver(update);
     cards.forEach(card => observer.observe(card));
     window.addEventListener('resize', update);
@@ -182,7 +186,7 @@ export function FeaturedProjects({ projects, mode = 'Stack' }: { projects: Proje
   }, [projects, stackStep]);
 
   return <div ref={stack} className="project-stack" data-motion={enabled}>
-    {projects.map((project, index) => <StackedProject key={project.title} project={project} index={index} count={projects.length} top={68 + index * stackStep} progress={scrollYProgress} enabled={enabled} />)}
+    {projects.map((project, index) => <StackedProject key={project.title} project={project} index={index} count={projects.length} top={stickyTops[index] ?? 68 + index * stackStep} progress={scrollYProgress} enabled={enabled} />)}
   </div>;
 }
 
