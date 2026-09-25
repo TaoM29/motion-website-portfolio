@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AnimationItem } from 'lottie-web';
 
-// Chan Pan's Poker Chip Shuffle, distributed under the Lottie Simple License.
-// Preserve 120 frames at 60 fps and the five-frame offsets between chips.
 export function PokerHand({ active }: { active: boolean }) {
   const host = useRef<HTMLDivElement>(null);
   const player = useRef<AnimationItem | null>(null);
@@ -44,9 +42,7 @@ export function PokerHand({ active }: { active: boolean }) {
       animation.addEventListener('data_failed', () => {
         if (!cancelled) setReady(false);
       });
-    }).catch(() => {
-      // Keep the static chip stacks if the renderer or local asset cannot load.
-    });
+    }).catch(() => undefined);
     return () => {
       cancelled = true;
       controller.abort();

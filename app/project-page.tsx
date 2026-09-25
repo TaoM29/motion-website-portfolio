@@ -1,4 +1,3 @@
-// Static Vite pages use ordinary links and pre-optimized images, not Next APIs.
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { portfolio, type Project } from './portfolio';
 import { projectPath } from './site';

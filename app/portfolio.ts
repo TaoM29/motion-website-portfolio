@@ -20,9 +20,6 @@ export function hasProjectImage(project: Project): project is ProjectWithImage {
   return Boolean(project.image);
 }
 
-// Personal facts: job-application/CV, PROJECTS.md and SKILLS.md (September 2026).
-// Age, interests and completed KPI status: supplied directly by Taofik.
-// Reviewed the ten most recently modified CV PDFs on 2026-09-09; project notes clarify older CV claims.
 export const portfolio = {
   name: 'Taofik Muhriz',
   introduction: 'I’m a data scientist with an MSc from NMBU. I build machine-learning models, data tools and websites, from exploring the problem to delivering the product.',

@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap');
 @import 'tailwindcss';
 @theme { --font-sans: 'Kanit', Arial, sans-serif; }
-/* Case studies share the portfolio typography and palette. */
 .case-study { max-width: 1120px; margin: 0 auto; padding: 54px 6% 80px; }
 .case-breadcrumb { display: flex; gap: 14px; flex-wrap: wrap; color: #a1a4ad; font-size: .875rem; margin-bottom: 54px; }
 .case-breadcrumb a { text-decoration: underline; text-underline-offset: 4px; }
@@ -56,7 +55,6 @@ p, h1, h2, h3 { margin: 0; }
 .round-link { display: inline-flex; align-items: center; gap: 26px; background: #681b2a; border: 1px solid #9d2b40; border-radius: 50px; padding: 15px 24px; font-size: 1rem; transition: background .2s, transform .2s; }
 .hero-summary .round-link { margin-top: 28px; }
 .round-link:hover { background: #89283b; transform: translateY(-2px); }
-/* The black image backdrop blends into the hero, leaving only the head silhouette. */
 .portrait-stage { position: relative; width: 100%; max-width: 580px; aspect-ratio: 1; min-width: 0; justify-self: center; perspective: 1100px; z-index: 2; mix-blend-mode: lighten; }
 .portrait-scroll, .portrait-tilt, .portrait-float { height: 100%; }
 .portrait-tilt { pointer-events: none; transform-origin: 50% 58%; will-change: transform; }
@@ -170,7 +168,6 @@ h3 { font-weight: 400; }
  .typing-cursor { display: none; }
 }
 
-/* Scroll, depth and project storytelling. */
 .magnetic-zone { display: inline-flex; max-width: 100%; }
 .scroll-word { display: inline-block; }
 .about-section, .interests-section { isolation: isolate; }
@@ -316,7 +313,6 @@ h3 { font-weight: 400; }
  .interest-motion-control { display: none; }
 }
 
-/* Project stories and evidence stay readable outside the folding stack. */
 .project-summary { margin-top: 22px; display: grid; gap: 14px; }
 .project-summary dt { color: #f0f1f4; font-size: .875rem; font-weight: 500; margin-bottom: 4px; }
 .project-summary dd { margin: 0; color: #bdc1cc; font-size: 1rem; line-height: 1.6; font-weight: 300; }

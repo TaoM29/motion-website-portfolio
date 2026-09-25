@@ -18,7 +18,6 @@ export default defineConfig({
   plugins: [react(), {
     name: 'portfolio-dev-routes',
     configureServer(server) {
-      // Production has individual HTML files. Development uses the React entry.
       server.middlewares.use((request, _response, next) => {
         const path = request.url?.split('?')[0].replace(/\/$/, '');
         if (portfolio.projects.some(project => path === `/projects/${project.slug}`)) request.url = '/index.html';

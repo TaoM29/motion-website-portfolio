@@ -35,7 +35,6 @@ export function createTennisScene(host: HTMLDivElement, onContextLost: () => voi
   scene.add(shadow, impact);
 
   const state = createTennisState();
-  // The initial floor pose stays still when reduced motion is requested.
   let layout: TennisLayout | null = null;
   let active = false;
   let disposed = false;

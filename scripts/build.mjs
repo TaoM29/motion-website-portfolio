@@ -3,7 +3,6 @@ import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build } from 'vite';
 
-// Both visitors and crawlers receive the same HTML. React only hydrates it.
 process.env.NODE_ENV = 'production';
 await build();
 await build({ build: { ssr: 'src/entry-server.tsx', outDir: '.prerender', emptyOutDir: true } });
@@ -45,7 +44,6 @@ try {
     await mkdir(dirname(output), { recursive: true });
     await writeFile(output, html);
   }
-  // Only real canonical pages; no hashes, filters, invented dates or preview URLs.
   await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${paths.map(path => `  <url><loc>${escape(site.origin + path)}</loc></url>`).join('\n')}\n</urlset>\n`);
   await writeFile('dist/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${site.origin}/sitemap.xml\n`);
   console.log(`Prerendered ${paths.length} indexable pages, a 404 page, robots.txt and sitemap.xml.`);

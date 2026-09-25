@@ -1,7 +1,5 @@
 'use client';
 
-// These local fallback assets are served directly by Vite, without a Next image server.
-
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import type { TennisLayout, TennisScene } from './tennis-scene';
 
@@ -45,9 +43,6 @@ export function TennisDribble({ slot, gallery, active }: {
     observer.observe(container);
     window.addEventListener('resize', measure);
     measure();
-    // Fetch and warm the separate renderer chunk immediately after the page
-    // mounts. Animation itself still pauses offscreen. Never show a different
-    // flat racket while the real model is preparing.
     import('./tennis-scene').then(async ({ createTennisScene }) => {
       if (cancelled) return;
       instance = createTennisScene(host, () => { if (!cancelled) setStatus('fallback'); });

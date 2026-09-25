@@ -16,8 +16,6 @@ function cylinderBetween(from: THREE.Vector3, to: THREE.Vector3, radius: number)
   return geometry;
 }
 
-// Keep the contact centre at the origin and the grip at the same X position
-// so the detailed model uses the existing swing without changing its timing.
 function headPoint(angle: number) {
   const cosine = Math.cos(angle);
   return new THREE.Vector3(51 * cosine, 38 * Math.sin(angle) * (1 - 0.055 * cosine), 0);
@@ -116,7 +114,6 @@ function gripGeometry() {
   return geometry;
 }
 
-/** An unbranded racket, using the supplied views for construction and finish. */
 export function createRacket() {
   const racket = new THREE.Group();
   racket.name = 'Tennis racket';
@@ -132,7 +129,6 @@ export function createRacket() {
   frame.name = 'Solid hoop';
   racket.add(frame);
 
-  // Recessed outer channel: the red lips remain visible on either side.
   const bumperPoint = (t: number) => {
     const angle = Math.PI * 0.24 + t * Math.PI * 1.52;
     return headPoint(angle).addScaledVector(headNormal(angle), 1.97);
@@ -203,7 +199,6 @@ export function createRacket() {
   racket.add(mergedMesh(eyelets, graphite, 'Individual string eyelets'));
   racket.add(mergedMesh(seats, darkRed, 'Grommet collars'));
 
-  // Only two continuous arms; the full throat remains open.
   for (const side of [-1, 1]) {
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(36.5, side * 25.5, 0),
@@ -219,7 +214,6 @@ export function createRacket() {
   }
   racket.add(new THREE.Mesh(cylinderBetween(new THREE.Vector3(102, 0, 0), new THREE.Vector3(111, 0, 0), 3.9), crimson));
 
-  // Small plain metallic accents, with no wordmark or brand pattern.
   const accents: THREE.BufferGeometry[] = [];
   for (const side of [-1, 1]) {
     const points = Array.from({ length: 25 }, (_, i) => {

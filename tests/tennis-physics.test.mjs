@@ -58,7 +58,6 @@ void test('the racket has a solid 3D frame, open centre, strings and volume in t
   assert.equal(ray.intersectObject(frame).length, 0, 'the hoop centre should be open');
   ray.set(new Vector3(51, 0, 30), new Vector3(0, 0, -1));
   assert.ok(ray.intersectObject(frame).length > 0, 'the frame should have an actual front surface');
-  // Check the actual open throat, including where the old brace crossed it.
   for (const [x, y] of [[58, -12], [62, 0], [58, 12], [68, 0], [76, 0]]) {
     ray.set(new Vector3(x, y, 30), new Vector3(0, 0, -1));
     assert.equal(ray.intersectObject(racket, true).length, 0, 'no brace or third arm may cross the open throat');
