@@ -84,7 +84,7 @@ export const portfolio = {
       details: [{"label": "Bilingual development", "text": "I built English and Arabic versions of the website, with left-to-right and right-to-left layouts."}, {"label": "Interface", "text": "Responsive layouts and navigation support the company’s content across screen sizes. Use the language buttons to compare the homepage designs."}],
       detailLabel: "View project details",
       alternateImage: {"src": "/images/projects/altawfiq-ar.webp", "alt": "Arabic homepage of the AL-TAWFIQ website", "label": "Arabic"},
-      image: { src: '/images/projects/altawfiq-en.webp', alt: 'English homepage of the AL-TAWFIQ website I developed', width: 1440, height: 960, caption: 'English and Arabic web development' },
+      image: { src: '/images/projects/altawfiq-en.webp', alt: 'English homepage of the AL-TAWFIQ website I developed', width: 1600, height: 903 },
       category: 'Client work',
       description: 'I built the company’s website in English and Arabic, including layouts that work in both reading directions. The public site is live.',
       status: 'Completed',
